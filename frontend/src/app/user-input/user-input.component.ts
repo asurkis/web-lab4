@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
+import { SharedDataService } from '../shared-data.service';
 
 @Component({
   selector: 'app-user-input',
@@ -9,7 +10,6 @@ import { SelectItem } from 'primeng/api';
 export class UserInputComponent implements OnInit {
   x = '0';
   y = '0';
-  r = '0';
   validXs: SelectItem[] = [];
   validYs = {
     min: -5,
@@ -17,7 +17,9 @@ export class UserInputComponent implements OnInit {
   };
   validRs: SelectItem[] = [];
 
-  constructor() {
+  constructor(
+    private sharedData: SharedDataService
+  ) {
     for (let i = -4; i <= 4; i++) {
       this.validXs.push({
         label: '' + i,
@@ -34,6 +36,14 @@ export class UserInputComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  get r(): string {
+    return '' + this.sharedData.selectedRadius;
+  }
+
+  set r(r: string) {
+    this.sharedData.selectedRadius = +r;
   }
 
   get isFormValid(): boolean {

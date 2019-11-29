@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedDataService } from '../shared-data.service';
 
 @Component({
   selector: 'app-results-picture',
@@ -6,7 +7,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./results-picture.component.css']
 })
 export class ResultsPictureComponent implements OnInit {
-  radius = 5;
   scale = 50;
   displayRect = {
     left: -6,
@@ -18,11 +18,24 @@ export class ResultsPictureComponent implements OnInit {
   pictureHeight = Math.abs(this.translateY(this.displayRect.top) - this.translateY(this.displayRect.bottom));
 
   maxCoord = 5;
-  points = [];
+  points = [
+    { x: -1, y: -1 },
+    { x: 1, y: 1 },
+  ];
 
-  constructor() { }
+  constructor(
+    private sharedData: SharedDataService
+  ) { }
 
   ngOnInit() {
+  }
+
+  get radius(): number {
+    return this.sharedData.selectedRadius;
+  }
+
+  set radius(r: number) {
+    this.sharedData.selectedRadius = r;
   }
 
   translateX(x: number): number {
@@ -65,5 +78,12 @@ export class ResultsPictureComponent implements OnInit {
       }
     }
     return result;
+  }
+
+  pointColor(point: { x: number, y: number }): string {
+    if (!this.radius) {
+      return '#eee';
+    }
+    return '#ff0';
   }
 }

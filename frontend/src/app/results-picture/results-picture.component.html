@@ -1,5 +1,4 @@
 <p>results-picture works!</p>
-<p-slider [(ngModel)]="radius" min="0" max="5" step="0.01"></p-slider>
 <svg [attr.width]="pictureWidth" [attr.height]="pictureHeight">
   <g *ngIf="radius" id="figure">
     <path [attr.d]="''
@@ -47,4 +46,6 @@
     <text [attr.x]="translateX(displayRect.right) - 5" [attr.y]="translateY(0) - 10" text-anchor="end">x</text>
     <text [attr.x]="translateX(0) - 10" [attr.y]="translateY(displayRect.top) + 10" text-anchor="end">y</text>
   </g>
+
+  <circle class="point" *ngFor="let point of points" [attr.cx]="translateX(point.x)" [attr.cy]="translateY(point.y)" r="5" [style.fill]="pointColor(point)" />
 </svg>
