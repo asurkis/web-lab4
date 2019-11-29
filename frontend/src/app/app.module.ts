@@ -1,14 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { MainComponent } from './main/main.component';
+import { LoginComponent } from './login/login.component';
+import { ResultsTableComponent } from './results-table/results-table.component';
+import { ResultsPictureComponent } from './results-picture/results-picture.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainComponent,
+    LoginComponent,
+    ResultsTableComponent,
+    ResultsPictureComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule.forRoot([
+      { path: '', component: MainComponent },
+      { path: 'login', component: LoginComponent },
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]
