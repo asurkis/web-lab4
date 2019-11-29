@@ -1,1 +1,49 @@
 <p>results-picture works!</p>
+<svg [attr.width]="pictureWidth" [attr.height]="pictureHeight">
+  <g *ngIf="radius" id="figure">
+    <path [attr.d]="''
+        + ' M ' + pictureCoord(0, 0)
+        + ' L ' + pictureCoord(0, -radius)
+        + ' A ' + (scale * radius) + ' ' + (scale * radius) + ' 0 0 0 ' + pictureCoord(radius, 0)
+        + ' Z '"/>
+    <polygon [attr.points]="''
+        + pictureCoord(0, 0)
+        + pictureCoord(.5 * radius, 0)
+        + pictureCoord(0, .5 * radius)"/>
+    <rect [attr.x]="translateX(-radius)"
+          [attr.y]="translateY(radius)"
+          [attr.width]="scale * radius"
+          [attr.height]="scale * radius"/>
+  </g>
+
+  <g id="axes">
+    <line [attr.x1]="translateX(displayRect.left)"
+          [attr.y1]="translateY(0)"
+          [attr.x2]="translateX(displayRect.right) - 10"
+          [attr.y2]="translateY(0)"/>
+    <line [attr.x1]="translateX(0)"
+          [attr.y1]="translateY(displayRect.bottom)"
+          [attr.x2]="translateX(0)"
+          [attr.y2]="translateY(displayRect.top) + 10"/>
+
+    <polygon [attr.points]="pictureCoord(displayRect.right, 0)
+        + ' ' + (translateX(displayRect.right) - 10) + ' ' + (translateY(0) - 5)
+        + ' ' + (translateX(displayRect.right) - 10) + ' ' + (translateY(0) + 5)"/>
+    <polygon [attr.points]="pictureCoord(0, displayRect.top)
+        + ' ' + (translateX(0) - 5) + ' ' + (translateY(displayRect.top) + 10)
+        + ' ' + (translateX(0) + 5) + ' ' + (translateY(displayRect.top) + 10)"/>
+
+    <g *ngFor="let x of markListX">
+      <circle [attr.cx]="translateX(x)" [attr.cy]="translateY(0)" r="3"/>
+      <text [attr.x]="translateX(x) - 4" [attr.y]="translateY(0) - 4" text-anchor="end">{{ x }}</text>
+    </g>
+
+    <g *ngFor="let y of markListY">
+      <circle [attr.cx]="translateX(0)" [attr.cy]="translateY(y)" r="3"/>
+      <text [attr.x]="translateX(0) - 4" [attr.y]="translateY(y) - 4" text-anchor="end">{{ y }}</text>
+    </g>
+
+    <text [attr.x]="translateX(displayRect.right) - 5" [attr.y]="translateY(0) - 10" text-anchor="end">x</text>
+    <text [attr.x]="translateX(0) - 10" [attr.y]="translateY(displayRect.top) + 10" text-anchor="end">y</text>
+  </g>
+</svg>

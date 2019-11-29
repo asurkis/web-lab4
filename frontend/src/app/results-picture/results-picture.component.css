@@ -1,0 +1,15 @@
+#figure * {
+  fill: aquamarine;
+}
+
+#axes line {
+  stroke: black;
+}
+
+#axes polygon, #axes circle {
+  fill: black;
+}
+
+#axes text {
+  font-family: monospace;
+}
