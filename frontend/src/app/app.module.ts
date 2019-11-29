@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,6 +27,7 @@ import { ResultsPictureComponent } from './results-picture/results-picture.compo
       { path: '', component: MainComponent },
       { path: 'login', component: LoginComponent },
     ]),
+    FormsModule,
     TableModule,
     InputTextModule,
     PasswordModule,
