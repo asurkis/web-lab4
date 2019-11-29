@@ -1,0 +1,25 @@
+<p>user-input works!</p>
+<div>
+  <label>
+    X
+    <p-dropdown [options]="validXs" [(ngModel)]="x"></p-dropdown>
+  </label>
+  {{ x }}
+</div>
+<div>
+  <label>
+    Y
+    <input type="text" pInputText [(ngModel)]="y" placeholder="Введите число от -5 до 3" required>
+  </label>
+  {{ y }}
+</div>
+<div>
+  <label>
+    R
+    <p-dropdown [options]="validRs" [(ngModel)]="r"></p-dropdown>
+  </label>
+  {{ r }}
+</div>
+<div>
+  <p-button label="Отправить" (onClick)="handleClick($event)" [disabled]="!isFormValid"></p-button>
+</div>

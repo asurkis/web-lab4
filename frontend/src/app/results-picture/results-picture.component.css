@@ -13,3 +13,8 @@
 #axes text {
   font-family: monospace;
 }
+
+p-slider {
+  display: block;
+  width: 300px;
+}
