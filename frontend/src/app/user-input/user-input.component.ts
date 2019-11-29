@@ -11,20 +11,24 @@ export class UserInputComponent implements OnInit {
   y = '0';
   r = '0';
   validXs: SelectItem[] = [];
+  validYs = {
+    min: -5,
+    max: 3,
+  };
   validRs: SelectItem[] = [];
 
   constructor() {
     for (let i = -4; i <= 4; i++) {
       this.validXs.push({
         label: '' + i,
-        value: i,
+        value: '' + i,
       });
     }
 
     for (let i = 0; i <= 4; i++) {
       this.validRs.push({
         label: '' + i,
-        value: i
+        value: '' + i,
       });
     }
   }
@@ -33,10 +37,14 @@ export class UserInputComponent implements OnInit {
   }
 
   get isFormValid(): boolean {
-    return '' !== this.y && -5 <= +this.y && +this.y <= 3;
+    return '' !== this.y && this.validYs.min <= +this.y && +this.y <= this.validYs.max;
   }
 
   handleClick(event) {
-    console.log(event);
+    console.log({
+      x: this.x,
+      y: this.y,
+      r: this.r,
+    });
   }
 }
