@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 	implementation("org.springframework.boot:spring-boot-starter-hateoas")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -32,16 +33,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
-	runtimeOnly("com.oracle.ojdbc:ojdbc8")
-	runtimeOnly("mysql:mysql-connector-java")
-	runtimeOnly("org.postgresql:postgresql")
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-	}
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
+//	runtimeOnly("com.oracle.ojdbc:ojdbc8")
+//	runtimeOnly("mysql:mysql-connector-java")
+//	runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.withType<KotlinCompile> {
