@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { SharedDataService } from '../shared-data.service';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class MainComponent implements OnInit {
+export class RegisterComponent implements OnInit {
+  confirmPassword: string;
 
   constructor(
     private shared: SharedDataService,
@@ -15,12 +16,5 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (!this.shared.authenticated) {
-      this.router.navigateByUrl('/login');
-    }
-  }
-
-  logout() {
-
   }
 }

@@ -28,25 +28,6 @@ class UserController(val userRepository: UserRepository,
         return CollectionModel(list,
                 linkTo(methodOn(javaClass).all()).withRel("users"))
     }
-
-    @ResponseBody
-    @PostMapping("/login")
-    fun login(@RequestParam username: String, @RequestParam password: String): String {
-        val user = userRepository.findByName(username)
-        val hash = generateHash(password)
-
-        if (!user.isPresent) {
-            val newUser = User(name = username, passwordHash = hash)
-            userRepository.save(newUser)
-            return "${newUser.id}"
-        }
-
-        if (user.get().passwordHash == hash) {
-            return "${user.get().id}"
-        } else {
-            throw InvalidPasswordException()
-        }
-    }
 }
 
 @CrossOrigin("localhost:4200")

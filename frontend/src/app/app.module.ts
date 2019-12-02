@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
@@ -17,6 +18,7 @@ import { LoginComponent } from './login/login.component';
 import { ResultsTableComponent } from './results-table/results-table.component';
 import { ResultsPictureComponent } from './results-picture/results-picture.component';
 import { UserInputComponent } from './user-input/user-input.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -26,15 +28,19 @@ import { UserInputComponent } from './user-input/user-input.component';
     ResultsTableComponent,
     ResultsPictureComponent,
     UserInputComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: MainComponent },
+      { path: '', pathMatch: 'full', redirectTo: 'main' },
+      { path: 'main', component: MainComponent },
       { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
     ]),
+    HttpClientModule,
     ButtonModule,
     DropdownModule,
     InputTextModule,

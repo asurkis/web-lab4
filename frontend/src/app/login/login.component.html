@@ -1,6 +1,9 @@
-<div>
-  <input [(ngModel)]="username" type="text" pInputText>
-</div>
-<div>
-  <input [(ngModel)]="password" type="password" pPassword>
-</div>
+<p>
+  <input [(ngModel)]="shared.username" type="text" pInputText>
+</p>
+<p>
+  <input [(ngModel)]="shared.password" type="password" pPassword>
+</p>
+<p>
+  <button pButton type="button" label="Войти" [disabled]="shared.isAttemptingLogin" (click)="shared.login($event)"></button>
+</p>

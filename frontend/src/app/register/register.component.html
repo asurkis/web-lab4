@@ -1,0 +1,15 @@
+<p>
+  <input [(ngModel)]="shared.username" type="text" pInputText>
+</p>
+<p>
+  <input [(ngModel)]="shared.password" type="password" pPassword>
+</p>
+<p>
+  <input [(ngModel)]="confirmPassword" type="password" pPassword>
+</p>
+<p [style.color]="'red'" [style.visibility]="shared.password === confirmPassword ? 'hidden' : 'visible'">
+    Пароли не совпадают
+</p>
+<p>
+  <button pButton type="button" label="Зарегистрироваться" [disabled]="shared.isAttemptingLogin || shared.password !== confirmPassword" (click)="shared.register($event)"></button>
+</p>
