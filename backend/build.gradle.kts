@@ -11,6 +11,7 @@ plugins {
 group = "ru.ifmo.se.labs.asurkis.lab4"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 val developmentOnly by configurations.creating
 configurations {

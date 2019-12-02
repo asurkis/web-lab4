@@ -15,9 +15,9 @@ class BackendApplication {
             val users = listOf(
                     User(name = "A"),
                     User(name = "B"))
-            val points = users.zip(1..2)
+            val points = users.cartesian(1..2)
                     .map { Point(user = it.first, x = it.second.toDouble(), y = it.first.id.toDouble()) }
-            val results = points.zip(1..2)
+            val results = points.cartesian(1..2)
                     .map { Result(point = it.first, radius = it.second.toDouble()) }
 
             for (r in results) {
@@ -27,6 +27,12 @@ class BackendApplication {
             }
         }
     }
+}
+
+infix fun<A, B> Iterable<A>.cartesian(other: Iterable<B>): List<Pair<A, B>> {
+    val result = mutableListOf<Pair<A, B>>()
+    for (a in this) for (b in other) result.add(Pair(a, b))
+    return result.toList()
 }
 
 fun main(args: Array<String>) {
