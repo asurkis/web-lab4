@@ -29,7 +29,6 @@ class UserController(val userRepository: UserRepository,
 
     @GetMapping("/login")
     fun login() {
-
         TODO()
     }
 }
@@ -42,7 +41,7 @@ class PointController(val pointRepository: PointRepository,
     fun one(@CookieValue userId: Optional<Long>, @PathVariable id: Long): EntityModel<Point> {
         userId.orElseThrow { UnauthorizedException() }
         val point = pointRepository.findById(id).orElseThrow { PointNotFoundException(id) }
-        if (point.user.id != userId.get()) {
+        if (point.userId != userId.get()) {
             throw ForbiddenException()
         }
         return pointAssembler.toModel(point)
@@ -65,7 +64,7 @@ class ResultController(val resultRepository: ResultRepository,
     fun one(@CookieValue userId: Optional<Long>, @PathVariable id: Long): EntityModel<Result> {
         userId.orElseThrow { UnauthorizedException() }
         val result = resultRepository.findById(id).orElseThrow { ResultNotFoundException(id) }
-        if (result.point.user.id != userId.get()) {
+        if (result.point.userId != userId.get()) {
             throw ForbiddenException()
         }
         return resultAssembler.toModel(result)

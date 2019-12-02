@@ -11,25 +11,25 @@ class Advices {
     @ResponseBody
     @ExceptionHandler(UserNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun userNotFoundHandler(e: UserNotFoundException): String? = e.message
+    fun userNotFoundHandler(e: UserNotFoundException) = e.message
 
     @ResponseBody
     @ExceptionHandler(UnauthorizedException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    fun unauthorizedHandler(e: UnauthorizedException): String? = e.message
+    fun unauthorizedHandler(e: UnauthorizedException) = e.message
 
     @ResponseBody
     @ExceptionHandler(ForbiddenException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun forbiddenHandler(e: ForbiddenException): String? = e.message
+    fun forbiddenHandler(e: ForbiddenException) = e.message
 
     @ResponseBody
     @ExceptionHandler(PointNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun pointNotFoundHandler(e: PointNotFoundException): String? = e.message
+    fun pointNotFoundHandler(e: PointNotFoundException) = e.message
 
     @ResponseBody
     @ExceptionHandler(ResultNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun resultNotFoundHandler(e: ResultNotFoundException): String? = e.message
+    fun resultNotFoundHandler(e: ResultNotFoundException) = e.message
 }

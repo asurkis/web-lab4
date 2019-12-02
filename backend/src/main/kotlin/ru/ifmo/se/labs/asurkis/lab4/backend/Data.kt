@@ -32,6 +32,9 @@ data class Point(
     }
 }
 
+val Point.userId: Long
+    get() = user.id
+
 @Entity
 @Table(name = "results")
 data class Result(
@@ -45,3 +48,12 @@ data class Result(
     val result: Boolean
         get() = point.fallsInto(radius)
 }
+
+val Result.pointId: Long
+    get() = point.id
+
+val Result.user: User
+    get() = point.user
+
+val Result.userId: Long
+    get() = user.id

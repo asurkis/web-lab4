@@ -10,26 +10,24 @@ class BackendApplication {
     @Bean
     fun initData(userRepository: UserRepository,
                  pointRepository: PointRepository,
-                 resultRepository: ResultRepository): CommandLineRunner {
-        return CommandLineRunner {
-            val users = listOf(
-                    User(name = "A"),
-                    User(name = "B"))
-            val points = users.cartesian(1..2)
-                    .map { Point(user = it.first, x = it.second.toDouble(), y = it.first.id.toDouble()) }
-            val results = points.cartesian(1..2)
-                    .map { Result(point = it.first, radius = it.second.toDouble()) }
+                 resultRepository: ResultRepository) = CommandLineRunner {
+        val users = listOf(
+                User(name = "A"),
+                User(name = "B"))
+        val points = users.cartesian(1..2)
+                .map { Point(user = it.first, x = it.second.toDouble(), y = it.first.id.toDouble()) }
+        val results = points.cartesian(1..2)
+                .map { Result(point = it.first, radius = it.second.toDouble()) }
 
-            for (r in results) {
-                userRepository.save(r.point.user)
-                pointRepository.save(r.point)
-                resultRepository.save(r)
-            }
+        for (r in results) {
+            userRepository.save(r.point.user)
+            pointRepository.save(r.point)
+            resultRepository.save(r)
         }
     }
 }
 
-infix fun<A, B> Iterable<A>.cartesian(other: Iterable<B>): List<Pair<A, B>> {
+infix fun <A, B> Iterable<A>.cartesian(other: Iterable<B>): List<Pair<A, B>> {
     val result = mutableListOf<Pair<A, B>>()
     for (a in this) for (b in other) result.add(Pair(a, b))
     return result.toList()

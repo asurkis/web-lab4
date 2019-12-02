@@ -2,8 +2,8 @@ package ru.ifmo.se.labs.asurkis.lab4.backend
 
 import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.RepresentationModelAssembler
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -20,8 +20,8 @@ class UserAssembler: RepresentationModelAssembler<User, EntityModel<User>> {
 class PointAssembler: RepresentationModelAssembler<Point, EntityModel<Point>> {
     override fun toModel(point: Point): EntityModel<Point> {
         return EntityModel(point,
-                linkTo(methodOn(PointController::class.java).one(Optional.of(point.user.id), point.id)).withSelfRel(),
-                linkTo(methodOn(PointController::class.java).all(Optional.of(point.user.id))).withRel("points"))
+                linkTo(methodOn(PointController::class.java).one(Optional.of(point.userId), point.id)).withSelfRel(),
+                linkTo(methodOn(PointController::class.java).all(Optional.of(point.userId))).withRel("points"))
     }
 }
 
@@ -29,7 +29,7 @@ class PointAssembler: RepresentationModelAssembler<Point, EntityModel<Point>> {
 class ResultAssembler: RepresentationModelAssembler<Result, EntityModel<Result>> {
     override fun toModel(result: Result): EntityModel<Result> {
         return EntityModel(result,
-                linkTo(methodOn(ResultController::class.java).one(Optional.of(result.point.user.id), result.id)).withSelfRel(),
-                linkTo(methodOn(ResultController::class.java).all(Optional.of(result.point.user.id))).withRel("results"))
+                linkTo(methodOn(ResultController::class.java).one(Optional.of(result.userId), result.id)).withSelfRel(),
+                linkTo(methodOn(ResultController::class.java).all(Optional.of(result.userId))).withRel("results"))
     }
 }
