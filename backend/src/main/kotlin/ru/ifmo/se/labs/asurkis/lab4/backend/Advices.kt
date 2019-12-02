@@ -19,6 +19,11 @@ class Advices {
     fun unauthorizedHandler(e: UnauthorizedException) = e.message
 
     @ResponseBody
+    @ExceptionHandler(InvalidPasswordException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun invalidPasswordHandler(e: InvalidPasswordException) = e.message
+
+    @ResponseBody
     @ExceptionHandler(ForbiddenException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     fun forbiddenHandler(e: ForbiddenException) = e.message

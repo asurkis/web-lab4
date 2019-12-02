@@ -11,6 +11,7 @@ import java.util.*
 @RestController
 class UserController(val userRepository: UserRepository,
                      val userAssembler: UserAssembler) {
+    @ResponseBody
     @GetMapping("/users/{id}")
     fun one(@PathVariable id: Long): EntityModel<User> {
         val user = userRepository.findById(id)
@@ -20,6 +21,7 @@ class UserController(val userRepository: UserRepository,
         return userAssembler.toModel(user.get())
     }
 
+    @ResponseBody
     @GetMapping("/users")
     fun all(): CollectionModel<EntityModel<User>> {
         val list = userRepository.findAll().map { userAssembler.toModel(it!!) }
@@ -27,9 +29,23 @@ class UserController(val userRepository: UserRepository,
                 linkTo(methodOn(javaClass).all()).withRel("users"))
     }
 
-    @GetMapping("/login")
-    fun login() {
-        TODO()
+    @ResponseBody
+    @PostMapping("/login")
+    fun login(@RequestParam username: String, @RequestParam password: String): String {
+        val user = userRepository.findByName(username)
+        val hash = generateHash(password)
+
+        if (!user.isPresent) {
+            val newUser = User(name = username, passwordHash = hash)
+            userRepository.save(newUser)
+            return "${newUser.id}"
+        }
+
+        if (user.get().passwordHash == hash) {
+            return "${user.get().id}"
+        } else {
+            throw InvalidPasswordException()
+        }
     }
 }
 
@@ -37,6 +53,7 @@ class UserController(val userRepository: UserRepository,
 @RestController
 class PointController(val pointRepository: PointRepository,
                       val pointAssembler: PointAssembler) {
+    @ResponseBody
     @GetMapping("/points/{id}")
     fun one(@CookieValue userId: Optional<Long>, @PathVariable id: Long): EntityModel<Point> {
         userId.orElseThrow { UnauthorizedException() }
@@ -47,6 +64,7 @@ class PointController(val pointRepository: PointRepository,
         return pointAssembler.toModel(point)
     }
 
+    @ResponseBody
     @GetMapping("/points")
     fun all(@CookieValue userId: Optional<Long>): CollectionModel<EntityModel<Point>> {
         userId.orElseThrow { UnauthorizedException() }
@@ -60,6 +78,7 @@ class PointController(val pointRepository: PointRepository,
 @RestController
 class ResultController(val resultRepository: ResultRepository,
                        val resultAssembler: ResultAssembler) {
+    @ResponseBody
     @GetMapping("/results/{id}")
     fun one(@CookieValue userId: Optional<Long>, @PathVariable id: Long): EntityModel<Result> {
         userId.orElseThrow { UnauthorizedException() }
@@ -70,6 +89,7 @@ class ResultController(val resultRepository: ResultRepository,
         return resultAssembler.toModel(result)
     }
 
+    @ResponseBody
     @GetMapping("/results")
     fun all(@CookieValue userId: Optional<Long>): CollectionModel<EntityModel<Result>> {
         userId.orElseThrow { UnauthorizedException() }

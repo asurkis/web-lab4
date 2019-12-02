@@ -1,8 +1,11 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend
 
 import org.springframework.data.repository.CrudRepository
+import java.util.*
 
-interface UserRepository: CrudRepository<User, Long>
+interface UserRepository: CrudRepository<User, Long> {
+    fun findByName(name: String): Optional<User>
+}
 
 interface PointRepository: CrudRepository<Point, Long> {
     fun findByUserId(id: Long): Iterable<Point>

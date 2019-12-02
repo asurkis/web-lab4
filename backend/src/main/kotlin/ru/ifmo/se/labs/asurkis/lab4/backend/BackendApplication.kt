@@ -12,8 +12,8 @@ class BackendApplication {
                  pointRepository: PointRepository,
                  resultRepository: ResultRepository) = CommandLineRunner {
         val users = listOf(
-                User(name = "A"),
-                User(name = "B"))
+                User(name = "A", passwordHash = generateHash("A")),
+                User(name = "B", passwordHash = generateHash("B")))
         val points = users.cartesian(1..2)
                 .map { Point(user = it.first, x = it.second.toDouble(), y = it.first.id.toDouble()) }
         val results = points.cartesian(1..2)
