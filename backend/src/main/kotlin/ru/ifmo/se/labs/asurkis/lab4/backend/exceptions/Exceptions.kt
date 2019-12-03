@@ -1,4 +1,4 @@
-package ru.ifmo.se.labs.asurkis.lab4.backend
+package ru.ifmo.se.labs.asurkis.lab4.backend.exceptions
 
 class UserNotFoundException(id: Long) : Exception("User not found: $id")
 class UnauthorizedException : Exception("Not logged in")

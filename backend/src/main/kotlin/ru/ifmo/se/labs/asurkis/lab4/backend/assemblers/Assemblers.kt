@@ -1,10 +1,14 @@
-package ru.ifmo.se.labs.asurkis.lab4.backend
+package ru.ifmo.se.labs.asurkis.lab4.backend.assemblers
 
 import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.RepresentationModelAssembler
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.stereotype.Component
+import ru.ifmo.se.labs.asurkis.lab4.backend.controllers.PointController
+import ru.ifmo.se.labs.asurkis.lab4.backend.controllers.ResultController
+import ru.ifmo.se.labs.asurkis.lab4.backend.controllers.UserController
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.*
 
 @Component
 class UserAssembler: RepresentationModelAssembler<User, EntityModel<User>> {

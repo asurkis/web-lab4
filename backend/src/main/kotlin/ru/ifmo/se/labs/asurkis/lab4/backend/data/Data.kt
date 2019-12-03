@@ -1,4 +1,4 @@
-package ru.ifmo.se.labs.asurkis.lab4.backend
+package ru.ifmo.se.labs.asurkis.lab4.backend.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*

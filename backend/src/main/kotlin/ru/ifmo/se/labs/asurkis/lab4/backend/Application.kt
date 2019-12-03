@@ -4,6 +4,13 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.generateHash
+import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
+import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
+import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.UserRepository
 
 //@Configuration
 //@Order(SecurityProperties.BASIC_AUTH_ORDER)

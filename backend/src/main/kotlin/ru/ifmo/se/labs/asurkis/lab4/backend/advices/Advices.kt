@@ -1,10 +1,11 @@
-package ru.ifmo.se.labs.asurkis.lab4.backend
+package ru.ifmo.se.labs.asurkis.lab4.backend.advices
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
+import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.*
 
 @ControllerAdvice
 class Advices {
