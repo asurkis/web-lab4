@@ -4,9 +4,11 @@ import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RestController
 import ru.ifmo.se.labs.asurkis.lab4.backend.assemblers.ResultAssembler
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.userId
 import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.ForbiddenException

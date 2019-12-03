@@ -1,18 +1,27 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend.controllers
 
-import org.springframework.web.bind.annotation.*
-import ru.ifmo.se.labs.asurkis.lab4.backend.forms.UserForm
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import ru.ifmo.se.labs.asurkis.lab4.backend.services.UserService
-import java.util.*
 import javax.servlet.http.HttpSession
 
 @RestController
-class UserController(val userService: UserService) {
+class UserController(val userService: UserService,
+                     val authenticationManager: AuthenticationManager) {
     @PostMapping("/register")
     fun register(@RequestParam username: String,
                  @RequestParam password: String,
-                 session: HttpSession): Map<String, String> {
-        userService.registerNew(UserForm(username, password))
-        return Collections.singletonMap("token", session.id)
+                 session: HttpSession) {
+        val user = userService.registerNew(username, password)
+        val token = UsernamePasswordAuthenticationToken(user, password, user.authorities)
+        authenticationManager.authenticate(token)
+        println(token.isAuthenticated)
+        if (token.isAuthenticated) {
+            SecurityContextHolder.getContext().authentication = token
+        }
     }
 }

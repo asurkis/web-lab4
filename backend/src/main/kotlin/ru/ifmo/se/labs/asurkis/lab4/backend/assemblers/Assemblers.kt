@@ -7,8 +7,10 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.stereotype.Component
 import ru.ifmo.se.labs.asurkis.lab4.backend.controllers.PointController
 import ru.ifmo.se.labs.asurkis.lab4.backend.controllers.ResultController
-import ru.ifmo.se.labs.asurkis.lab4.backend.controllers.UserController
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.*
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.pointId
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.user
 
 @Component
 class PointAssembler: RepresentationModelAssembler<Point, EntityModel<Point>> {
