@@ -27,14 +27,6 @@ export class ResultsPictureComponent implements OnInit {
   ngOnInit() {
   }
 
-  get radius(): number {
-    return this.shared.selectedRadius;
-  }
-
-  set radius(r: number) {
-    this.shared.selectedRadius = r;
-  }
-
   translateX(x: number): number {
     return (x - this.displayRect.left) * this.scale;
   }
@@ -59,6 +51,22 @@ export class ResultsPictureComponent implements OnInit {
     return ' ' + translated.x + ' ' + translated.y + ' ';
   }
 
+  pointClass(point: Point): string {
+    return this.radius
+        ? (pointFitsIntoRadius(point, this.radius)
+            ? 'fits1'
+            : 'fits0')
+        : 'noRadius';
+  }
+
+  get radius(): number {
+    return this.shared.selectedRadius;
+  }
+
+  set radius(r: number) {
+    this.shared.selectedRadius = r;
+  }
+
   get markListX(): number[] {
     const result = [];
     for (let i = this.displayRect.left + 1; i < this.displayRect.right; i++) {
@@ -75,13 +83,5 @@ export class ResultsPictureComponent implements OnInit {
       }
     }
     return result;
-  }
-
-  pointClass(point: Point): string {
-    return this.radius
-        ? (pointFitsIntoRadius(point, this.radius)
-            ? 'fits1'
-            : 'fits0')
-        : 'noRadius';
   }
 }
