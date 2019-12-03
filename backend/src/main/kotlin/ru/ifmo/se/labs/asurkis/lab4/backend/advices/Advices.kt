@@ -21,7 +21,7 @@ class Advices {
 
     @ResponseBody
     @ExceptionHandler(UserAlreadyExistsException::class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     fun userAlreadyExists(e: InvalidPasswordException) = e.message
 
     @ResponseBody

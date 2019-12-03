@@ -1,19 +1,28 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
 @Entity
 @Table(name = "users")
-data class User(
+class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @JsonIgnore
         var id: Long = 0,
-        var name: String = "",
-        @JsonIgnore
-        var passwordHash: String = ""
-)
+        private var username: String = "",
+        private var password: String = ""
+) : UserDetails {
+    override fun getAuthorities() = mutableListOf(SimpleGrantedAuthority("USER"))
+    override fun isEnabled() = true
+    override fun getUsername() = username
+    override fun isCredentialsNonExpired() = true
+    override fun getPassword() = password
+    override fun isAccountNonExpired() = true
+    override fun isAccountNonLocked() = true
+}
 
 @Entity
 @Table(name = "points")
@@ -23,6 +32,7 @@ data class Point(
         @JsonIgnore
         var id: Long = 0,
         @ManyToOne
+        @JsonIgnore
         var user: User = User(),
         var x: Double = 0.0,
         var y: Double = 0.0

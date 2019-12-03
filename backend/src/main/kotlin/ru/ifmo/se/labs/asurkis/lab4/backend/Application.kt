@@ -19,13 +19,14 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.UserRepository
+import ru.ifmo.se.labs.asurkis.lab4.backend.services.UserService
 
 val passwordEncoder = BCryptPasswordEncoder()
 fun generateHash(password: String) = passwordEncoder.encode(password)!!
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration : WebSecurityConfigurerAdapter() {
+class SecurityConfiguration(var userService: UserService) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http!!
                 .csrf().disable()
@@ -38,12 +39,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.inMemoryAuthentication()
-                .withUser("A").password(passwordEncoder.encode("A")).roles("USER")
-                .and()
-                .withUser("B").password(passwordEncoder.encode("B")).roles("USER")
-                .and()
-                .withUser("admin").password(passwordEncoder.encode("admin")).roles("USER", "ADMIN")
+        auth.userDetailsService(userService)
     }
 }
 
@@ -54,8 +50,8 @@ class Application {
                  pointRepository: PointRepository,
                  resultRepository: ResultRepository) = CommandLineRunner {
         val users = listOf(
-                User(name = "A", passwordHash = generateHash("A")),
-                User(name = "B", passwordHash = generateHash("B")))
+                User(username = "A", password = generateHash("A")),
+                User(username = "B", password = generateHash("B")))
         users.forEach { userRepository.save(it) }
         val points = users.cartesian(1..2)
                 .map { Point(user = it.first, x = it.second.toDouble() * 2 - 3, y = it.first.id.toDouble() * 2 - 3) }

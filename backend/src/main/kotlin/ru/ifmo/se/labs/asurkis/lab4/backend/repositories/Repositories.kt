@@ -9,7 +9,7 @@ import java.util.*
 
 @Component
 interface UserRepository: CrudRepository<User, Long> {
-    fun findByName(name: String): Optional<User>
+    fun findByUsername(name: String): Optional<User>
 }
 
 @Component
