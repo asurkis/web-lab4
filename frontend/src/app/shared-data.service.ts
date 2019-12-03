@@ -35,7 +35,6 @@ export class SharedDataService {
     }
     for (const r of responseResults._embedded.results) {
       results[r._links.self.href] = r;
-      console.log(r._links.point.href, points[r._links.point.href]);
       r.point = points[r._links.point.href];
     }
 
