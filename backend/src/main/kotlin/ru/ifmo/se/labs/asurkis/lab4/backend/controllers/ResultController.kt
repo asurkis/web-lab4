@@ -12,16 +12,12 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 @RestController
 class ResultController(val resultRepository: ResultRepository,
                        val resultAssembler: ResultAssembler) {
-    @ResponseBody
-    @CrossOrigin("http://localhost:4200")
     @GetMapping("/results/{id}")
     fun one(@PathVariable id: Long): EntityModel<Result> {
         val result = resultRepository.findById(id).orElseThrow { ResultNotFoundException(id) }
         return resultAssembler.toModel(result)
     }
 
-    @ResponseBody
-    @CrossOrigin("http://localhost:4200")
     @GetMapping("/results")
     fun all(): CollectionModel<EntityModel<Result>> {
         val list = resultRepository.findAll().map { resultAssembler.toModel(it) }

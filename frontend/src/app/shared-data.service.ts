@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Point, Result } from './data-types';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { Point, Result } from './data-types';
 export class SharedDataService {
   isAttemptingLogin = false;
   authError = false;
-  authenticated = true;
+  authenticated = false;
+  lastAuthToken: string;
   selectedRadius: number;
   username: string;
   password: string;
@@ -19,12 +21,30 @@ export class SharedDataService {
   backendUrl = 'http://localhost:8080';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) { }
 
+  async xAuthToken(): Promise<string> {
+    if (!this.lastAuthToken) {
+      try {
+        const response: any = await this.http.get(this.backendUrl + '/token').toPromise();
+        this.lastAuthToken = response.token;
+      } catch (e) {
+        console.log(e);
+      } finally {
+        console.log('finally');
+      }
+    }
+    return this.lastAuthToken;
+  }
+
   async fetchResults() {
-    const requestPoints = this.http.get(this.backendUrl + '/points').toPromise();
-    const requestResults = this.http.get(this.backendUrl + '/results').toPromise();
+    const headers = new HttpHeaders({
+      'X-Auth-Token': await this.xAuthToken()
+    });
+    const requestPoints = this.http.get(this.backendUrl + '/points', { headers }).toPromise();
+    const requestResults = this.http.get(this.backendUrl + '/results', { headers }).toPromise();
     const responsePoints: any = await requestPoints;
     const responseResults: any = await requestResults;
 
@@ -42,34 +62,37 @@ export class SharedDataService {
     this.results = Object.values<Result>(results);
   }
 
-  sendRequest() {
+  async sendRequest() {
   }
 
-  pushResults() {
+  async pushResults() {
   }
 
-  login() {
-    const headers = new HttpHeaders({
-      authorization: 'Basic ' + btoa(this.username + ':' + this.password)
-    });
-    this.http.post(this.backendUrl + '/login', { headers }).toPromise()
-    .then(resp => {
-      console.log(resp);
+  async login() {
+    const headers = new HttpHeaders().set('X-Auth-Token', await this.xAuthToken());
+    const formData = new FormData();
+    formData.append('username', this.username);
+    formData.append('password', this.password);
+    try {
+      this.isAttemptingLogin = true;
+      const resp = await this.http.post(this.backendUrl + '/login', formData, { headers }).toPromise()
+      this.authenticated = true;
       this.authError = false;
-    }, err => {
-      console.error(err);
+      this.router.navigateByUrl('/');
+    } catch (err) {
       this.authError = true;
-    })
-    .finally(() => console.log('finally'));
+    } finally {
+      this.isAttemptingLogin = false;
+    }
   }
 
-  logout() {
+  async logout() {
     this.http.get(this.backendUrl + '/logout').toPromise()
       .then(r => console.log('then', r), e => console.log('catch', e))
       .finally(() => console.log('finally'));
   }
 
-  register() {
+  async register() {
     this.http.post(this.backendUrl + '/register', `username=${this.username}&password=${this.password}`).toPromise()
       .then(r => console.log('then', r))
       .catch(e => console.log('catch', e))

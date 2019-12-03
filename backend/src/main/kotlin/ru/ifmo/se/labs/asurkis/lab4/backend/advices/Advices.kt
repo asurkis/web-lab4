@@ -20,6 +20,11 @@ class Advices {
     fun unauthorizedHandler(e: UnauthorizedException) = e.message
 
     @ResponseBody
+    @ExceptionHandler(UserAlreadyExistsException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun userAlreadyExists(e: InvalidPasswordException) = e.message
+
+    @ResponseBody
     @ExceptionHandler(InvalidPasswordException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun invalidPasswordHandler(e: InvalidPasswordException) = e.message

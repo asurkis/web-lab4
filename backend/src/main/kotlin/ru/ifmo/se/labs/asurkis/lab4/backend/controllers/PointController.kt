@@ -12,16 +12,12 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 @RestController
 class PointController(val pointRepository: PointRepository,
                       val pointAssembler: PointAssembler) {
-    @ResponseBody
-    @CrossOrigin("http://localhost:4200")
     @GetMapping("/points/{id}")
     fun one(@PathVariable id: Long): EntityModel<Point> {
         val point = pointRepository.findById(id).orElseThrow { PointNotFoundException(id) }
         return pointAssembler.toModel(point)
     }
 
-    @ResponseBody
-    @CrossOrigin("http://localhost:4200")
     @GetMapping("/points")
     fun all(): CollectionModel<EntityModel<Point>> {
         val list = pointRepository.findAll().map { pointAssembler.toModel(it) }

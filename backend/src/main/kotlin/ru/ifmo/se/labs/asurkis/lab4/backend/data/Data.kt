@@ -15,8 +15,6 @@ data class User(
         var passwordHash: String = ""
 )
 
-fun generateHash(password: String): String = password
-
 @Entity
 @Table(name = "points")
 data class Point(

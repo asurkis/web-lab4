@@ -4,30 +4,51 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.session.web.http.HeaderHttpSessionIdResolver
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.generateHash
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.UserRepository
 
-//@Configuration
-//@Order(SecurityProperties.BASIC_AUTH_ORDER)
-//class SecurityConfiguration : WebSecurityConfigurerAdapter() {
-//    override fun configure(http: HttpSecurity?) {
-//        http!!.httpBasic()
-//                .and()
-//                .authorizeRequests().antMatchers("/", "/users", "/points", "/results").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .csrf()
-//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//    }
-//}
+val passwordEncoder = BCryptPasswordEncoder()
+fun generateHash(password: String) = passwordEncoder.encode(password)!!
+
+@Configuration
+@EnableWebSecurity
+class SecurityConfiguration : WebSecurityConfigurerAdapter() {
+    override fun configure(http: HttpSecurity?) {
+        http!!
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/token", "/register").permitAll()
+                .anyRequest().authenticated()
+                .and().cors()
+                .and().formLogin()
+                .and().logout().logoutUrl("/logout")
+    }
+
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.inMemoryAuthentication()
+                .withUser("A").password(passwordEncoder.encode("A")).roles("USER")
+                .and()
+                .withUser("B").password(passwordEncoder.encode("B")).roles("USER")
+                .and()
+                .withUser("admin").password(passwordEncoder.encode("admin")).roles("USER", "ADMIN")
+    }
+}
 
 @SpringBootApplication
-class BackendApplication {
+class Application {
     @Bean
     fun initData(userRepository: UserRepository,
                  pointRepository: PointRepository,
@@ -43,6 +64,22 @@ class BackendApplication {
                 .map { Result(point = it.first, radius = it.second.toDouble()) }
         results.forEach { resultRepository.save(it) }
     }
+
+    @Bean
+    fun corsConfigurer(): WebMvcConfigurer {
+        class Configurer : WebMvcConfigurer {
+            override fun addCorsMappings(registry: CorsRegistry) {
+                registry.addMapping("/**").allowedOrigins("http://localhost:4200")
+            }
+        }
+        return Configurer()
+    }
+
+    @Bean
+    fun sessionStrategy() = HeaderHttpSessionIdResolver.xAuthToken()
+
+    @Bean
+    fun passwordEncoder() = passwordEncoder
 }
 
 infix fun <A, B> Iterable<A>.cartesian(other: Iterable<B>): List<Pair<A, B>> {
@@ -52,5 +89,5 @@ infix fun <A, B> Iterable<A>.cartesian(other: Iterable<B>): List<Pair<A, B>> {
 }
 
 fun main(args: Array<String>) {
-    runApplication<BackendApplication>(*args)
+    runApplication<Application>(*args)
 }
