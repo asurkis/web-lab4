@@ -8,5 +8,5 @@
   <input [(ngModel)]="shared.password" type="password" pPassword>
 </p>
 <p>
-  <button pButton type="button" label="Войти" [disabled]="shared.isAttemptingLogin" (click)="shared.login($event)"></button>
+  <button pButton type="button" label="Войти" [disabled]="shared.isAttemptingLogin" (click)="login()"></button>
 </p>

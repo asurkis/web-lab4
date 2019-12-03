@@ -21,7 +21,7 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    this.shared.updateResults();
+    this.shared.fetchResults();
   }
 
   logout() {

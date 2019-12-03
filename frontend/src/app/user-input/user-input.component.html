@@ -1,24 +1,18 @@
-<p>user-input works!</p>
-<table>
-  <tr>
-    <td>Координата X</td>
-    <td>
-      <p-dropdown [options]="validXs" [(ngModel)]="x"></p-dropdown>
-    </td>
-  </tr>
-  <tr>
-    <td>Координата Y</td>
-    <td>
-      <span class="ui-float-label">
-        <input id="inputY" type="text" pInputText [(ngModel)]="y">
-        <label for="inputY">Введите число от {{ validYs.min }} до {{ validYs.max }}</label>
-      </span>
-    </td>
-  </tr>
-  <tr>
-    <td>Радиус</td>
-    <td>
-      <p-dropdown [options]="validRs" [(ngModel)]="r"></p-dropdown>
-    </td>
-  </tr>
-</table>
+<p>Координата X</p>
+<p>
+  <p-dropdown [options]="validXs" [(ngModel)]="x"></p-dropdown>
+</p>
+<p>Координата Y</p>
+<p>
+  <span class="ui-float-label">
+    <input pInputText id="inputY" type="text" [(ngModel)]="y">
+    <label for="inputY">Введите число от {{ validYs.min }} до {{ validYs.max }}</label>
+  </span>
+</p>
+<p>Радиус</p>
+<p>
+  <p-dropdown [options]="validRs" [(ngModel)]="r"></p-dropdown>
+</p>
+<p>
+  <button pButton type="button" label="Отправить" [disabled]="!isFormValid" (click)="handleClick()"></button>
+</p>

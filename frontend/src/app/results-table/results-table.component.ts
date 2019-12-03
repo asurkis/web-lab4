@@ -17,4 +17,7 @@ export class ResultsTableComponent implements OnInit {
   ngOnInit() {
   }
 
+  handleClick() {
+    this.shared.pushResults();
+  }
 }

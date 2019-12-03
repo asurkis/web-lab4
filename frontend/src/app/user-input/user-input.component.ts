@@ -38,6 +38,14 @@ export class UserInputComponent implements OnInit {
   ngOnInit() {
   }
 
+  handleClick() {
+    console.log({
+      x: this.x,
+      y: this.y,
+      r: this.r,
+    });
+  }
+
   get r(): string {
     return '' + this.sharedData.selectedRadius;
   }
@@ -48,13 +56,5 @@ export class UserInputComponent implements OnInit {
 
   get isFormValid(): boolean {
     return '' !== this.y && this.validYs.min <= +this.y && +this.y <= this.validYs.max;
-  }
-
-  handleClick(event) {
-    console.log({
-      x: this.x,
-      y: this.y,
-      r: this.r,
-    });
   }
 }

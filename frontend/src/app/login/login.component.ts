@@ -8,7 +8,6 @@ import { SharedDataService } from '../shared-data.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   constructor(
     private shared: SharedDataService,
     private router: Router
@@ -21,4 +20,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  login() {
+    this.shared.login();
+  }
 }

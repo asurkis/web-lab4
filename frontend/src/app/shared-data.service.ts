@@ -22,7 +22,7 @@ export class SharedDataService {
     private http: HttpClient
   ) { }
 
-  async updateResults() {
+  async fetchResults() {
     const requestPoints = this.http.get(this.backendUrl + '/points').toPromise();
     const requestResults = this.http.get(this.backendUrl + '/results').toPromise();
     const responsePoints: any = await requestPoints;
@@ -39,17 +39,14 @@ export class SharedDataService {
       r.point = points[r._links.point.href];
     }
 
-    console.log(points, results);
+    this.points = Object.values<Point>(points);
+    this.results = Object.values<Result>(results);
+  }
 
-    this.points = [];
-    for (const idx in points) {
-      this.points.push(points[idx]);
-    }
+  sendRequest() {
+  }
 
-    this.results = [];
-    for (const idx in results) {
-      this.results.push(results[idx]);
-    }
+  pushResults() {
   }
 
   login() {

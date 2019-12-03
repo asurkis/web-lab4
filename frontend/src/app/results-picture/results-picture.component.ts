@@ -42,10 +42,6 @@ export class ResultsPictureComponent implements OnInit {
     };
   }
 
-  pictureX(x: number) {
-
-  }
-
   pictureCoord(x: number, y: number): string {
     const translated = this.translateCoord(x, y);
     return ' ' + translated.x + ' ' + translated.y + ' ';
@@ -57,14 +53,6 @@ export class ResultsPictureComponent implements OnInit {
             ? 'fits1'
             : 'fits0')
         : 'noRadius';
-  }
-
-  get radius(): number {
-    return this.shared.selectedRadius;
-  }
-
-  set radius(r: number) {
-    this.shared.selectedRadius = r;
   }
 
   get markListX(): number[] {
@@ -83,5 +71,9 @@ export class ResultsPictureComponent implements OnInit {
       }
     }
     return result;
+  }
+
+  get radius(): number {
+    return this.shared.selectedRadius;
   }
 }
