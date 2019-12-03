@@ -19,7 +19,6 @@ class UserController(val userService: UserService,
         val user = userService.registerNew(username, password)
         val token = UsernamePasswordAuthenticationToken(user, password, user.authorities)
         authenticationManager.authenticate(token)
-        println(token.isAuthenticated)
         if (token.isAuthenticated) {
             SecurityContextHolder.getContext().authentication = token
         }
