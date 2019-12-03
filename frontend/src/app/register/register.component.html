@@ -1,13 +1,16 @@
-<p>
-  <input [(ngModel)]="shared.username" type="text" pInputText>
+<p [hidden]="!shared.authError">
+    При попытке входа возникла ошибка
 </p>
 <p>
-  <input [(ngModel)]="shared.password" type="password" pPassword>
+  <input pInputText [(ngModel)]="shared.username" type="text">
 </p>
 <p>
-  <input [(ngModel)]="confirmPassword" type="password" pPassword>
+  <input pPassword [(ngModel)]="shared.password" type="password">
 </p>
-<p [style.color]="'red'" [style.visibility]="shared.password === confirmPassword ? 'hidden' : 'visible'">
+<p>
+  <input pPassword [(ngModel)]="confirmPassword" type="password">
+</p>
+<p [style.color]="'red'" [hidden]="shared.password === confirmPassword">
     Пароли не совпадают
 </p>
 <p>

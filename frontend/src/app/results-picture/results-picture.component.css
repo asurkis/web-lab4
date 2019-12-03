@@ -14,8 +14,20 @@
   font-family: monospace;
 }
 
-circle.point {
+circle.noRadius, circle.fits0, circle.fits1 {
   stroke: black;
+}
+
+circle.noRadius {
+  fill: #aaaaaa;
+}
+
+circle.fits0 {
+  fill: #ff0000;
+}
+
+circle.fits1 {
+  fill: #00ff00;
 }
 
 p-slider {

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedDataService } from '../shared-data.service';
+import { Result } from '../data-types';
 
 @Component({
   selector: 'app-results-table',
@@ -6,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./results-table.component.css']
 })
 export class ResultsTableComponent implements OnInit {
+  results: Result[] = [];
 
-  constructor() { }
+  constructor(
+    private shared: SharedDataService
+  ) { }
 
   ngOnInit() {
   }

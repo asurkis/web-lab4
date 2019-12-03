@@ -5,6 +5,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 
+//@Configuration
+//@Order(SecurityProperties.BASIC_AUTH_ORDER)
+//class SecurityConfiguration : WebSecurityConfigurerAdapter() {
+//    override fun configure(http: HttpSecurity?) {
+//        http!!.httpBasic()
+//                .and()
+//                .authorizeRequests().antMatchers("/", "/users", "/points", "/results").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .csrf()
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//    }
+//}
+
 @SpringBootApplication
 class BackendApplication {
     @Bean

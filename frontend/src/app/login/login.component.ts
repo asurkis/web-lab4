@@ -15,8 +15,10 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.shared.authError = false;
     if (this.shared.authenticated) {
-      this.router.navigateByUrl('/main');
+      this.router.navigateByUrl('/');
     }
   }
+
 }

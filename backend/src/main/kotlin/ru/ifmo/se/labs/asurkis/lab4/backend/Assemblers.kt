@@ -7,6 +7,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.stereotype.Component
 import java.util.*
 
+/*
 @Component
 class UserAssembler: RepresentationModelAssembler<User, EntityModel<User>> {
     override fun toModel(user: User): EntityModel<User> {
@@ -20,8 +21,8 @@ class UserAssembler: RepresentationModelAssembler<User, EntityModel<User>> {
 class PointAssembler: RepresentationModelAssembler<Point, EntityModel<Point>> {
     override fun toModel(point: Point): EntityModel<Point> {
         return EntityModel(point,
-                linkTo(methodOn(PointController::class.java).one(Optional.of(point.userId), point.id)).withSelfRel(),
-                linkTo(methodOn(PointController::class.java).all(Optional.of(point.userId))).withRel("points"))
+                linkTo(methodOn(PointController::class.java).one(point.id)).withSelfRel(),
+                linkTo(methodOn(PointController::class.java).all()).withRel("points"))
     }
 }
 
@@ -29,7 +30,8 @@ class PointAssembler: RepresentationModelAssembler<Point, EntityModel<Point>> {
 class ResultAssembler: RepresentationModelAssembler<Result, EntityModel<Result>> {
     override fun toModel(result: Result): EntityModel<Result> {
         return EntityModel(result,
-                linkTo(methodOn(ResultController::class.java).one(Optional.of(result.userId), result.id)).withSelfRel(),
-                linkTo(methodOn(ResultController::class.java).all(Optional.of(result.userId))).withRel("results"))
+                linkTo(methodOn(ResultController::class.java).one(result.id)).withSelfRel(),
+                linkTo(methodOn(ResultController::class.java).all()).withRel("results"))
     }
 }
+*/

@@ -47,5 +47,16 @@
     <text [attr.x]="translateX(0) - 10" [attr.y]="translateY(displayRect.top) + 10" text-anchor="end">y</text>
   </g>
 
-  <circle class="point" *ngFor="let point of points" [attr.cx]="translateX(point.x)" [attr.cy]="translateY(point.y)" r="5" [style.fill]="pointColor(point)" />
+  <circle *ngFor="let point of shared.points" [attr.class]="pointClass(point)" [attr.cx]="translateX(point.x)" [attr.cy]="translateY(point.y)" r="5"/>
+
+  <g *ngIf="radius">
+    <circle class="point fits1" cx="12" cy="12" r="5"/>
+    <text x="24" y="18">Попадает в радиус</text>
+    <circle class="point fits0" cx="12" cy="36" r="5"/>
+    <text x="24" y="42">Не попадает в радиус</text>
+  </g>
+  <g *ngIf="!radius">
+    <circle class="point noRadius" cx="12" cy="12" r="5"/>
+    <text x="24" y="18">Радиус не задан</text>
+  </g>
 </svg>

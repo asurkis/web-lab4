@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
+import { Point, pointFitsIntoRadius } from '../data-types';
 
 @Component({
   selector: 'app-results-picture',
@@ -18,24 +19,20 @@ export class ResultsPictureComponent implements OnInit {
   pictureHeight = Math.abs(this.translateY(this.displayRect.top) - this.translateY(this.displayRect.bottom));
 
   maxCoord = 5;
-  points = [
-    { x: -1, y: -1 },
-    { x: 1, y: 1 },
-  ];
 
   constructor(
-    private sharedData: SharedDataService
+    private shared: SharedDataService
   ) { }
 
   ngOnInit() {
   }
 
   get radius(): number {
-    return this.sharedData.selectedRadius;
+    return this.shared.selectedRadius;
   }
 
   set radius(r: number) {
-    this.sharedData.selectedRadius = r;
+    this.shared.selectedRadius = r;
   }
 
   translateX(x: number): number {
@@ -46,7 +43,7 @@ export class ResultsPictureComponent implements OnInit {
     return (-y - this.displayRect.bottom) * this.scale;
   }
 
-  translateCoord(x: number, y: number): { x: number, y: number } {
+  translateCoord(x: number, y: number): Point {
     return {
       x: this.translateX(x),
       y: this.translateY(y),
@@ -80,10 +77,11 @@ export class ResultsPictureComponent implements OnInit {
     return result;
   }
 
-  pointColor(point: { x: number, y: number }): string {
-    if (!this.radius) {
-      return '#eee';
-    }
-    return '#ff0';
+  pointClass(point: Point): string {
+    return this.radius
+        ? (pointFitsIntoRadius(point, this.radius)
+            ? 'fits1'
+            : 'fits0')
+        : 'noRadius';
   }
 }

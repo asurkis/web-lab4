@@ -15,9 +15,13 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.shared.authError = false;
     if (!this.shared.authenticated) {
       this.router.navigateByUrl('/login');
+      return;
     }
+
+    this.shared.updateResults();
   }
 
   logout() {

@@ -16,5 +16,10 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.shared.authError = false;
+    if (this.shared.authenticated) {
+      this.router.navigateByUrl('/');
+    }
   }
+
 }

@@ -5,13 +5,14 @@ import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.web.bind.annotation.*
-import java.util.*
+import java.security.Principal
 
-@CrossOrigin("localhost:4200")
+/*
 @RestController
 class UserController(val userRepository: UserRepository,
                      val userAssembler: UserAssembler) {
     @ResponseBody
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/users/{id}")
     fun one(@PathVariable id: Long): EntityModel<User> {
         val user = userRepository.findById(id)
@@ -22,60 +23,57 @@ class UserController(val userRepository: UserRepository,
     }
 
     @ResponseBody
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/users")
     fun all(): CollectionModel<EntityModel<User>> {
         val list = userRepository.findAll().map { userAssembler.toModel(it!!) }
         return CollectionModel(list,
                 linkTo(methodOn(javaClass).all()).withRel("users"))
     }
+
+    @RequestMapping("/user")
+    fun user(user: Principal?) = user
 }
 
-@CrossOrigin("localhost:4200")
 @RestController
 class PointController(val pointRepository: PointRepository,
                       val pointAssembler: PointAssembler) {
     @ResponseBody
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/points/{id}")
-    fun one(@CookieValue userId: Optional<Long>, @PathVariable id: Long): EntityModel<Point> {
-        userId.orElseThrow { UnauthorizedException() }
+    fun one(@PathVariable id: Long): EntityModel<Point> {
         val point = pointRepository.findById(id).orElseThrow { PointNotFoundException(id) }
-        if (point.userId != userId.get()) {
-            throw ForbiddenException()
-        }
         return pointAssembler.toModel(point)
     }
 
     @ResponseBody
+    @CrossOrigin("*")
     @GetMapping("/points")
-    fun all(@CookieValue userId: Optional<Long>): CollectionModel<EntityModel<Point>> {
-        userId.orElseThrow { UnauthorizedException() }
-        val list = pointRepository.findByUserId(userId.get()).map { pointAssembler.toModel(it) }
+    fun all(): CollectionModel<EntityModel<Point>> {
+        val list = pointRepository.findAll().map { pointAssembler.toModel(it) }
         return CollectionModel(list,
-                linkTo(methodOn(PointController::class.java).all(userId)).withRel("points"))
+                linkTo(methodOn(PointController::class.java).all()).withRel("points"))
     }
 }
 
-@CrossOrigin("localhost:4200")
 @RestController
 class ResultController(val resultRepository: ResultRepository,
                        val resultAssembler: ResultAssembler) {
     @ResponseBody
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/results/{id}")
-    fun one(@CookieValue userId: Optional<Long>, @PathVariable id: Long): EntityModel<Result> {
-        userId.orElseThrow { UnauthorizedException() }
+    fun one(@PathVariable id: Long): EntityModel<Result> {
         val result = resultRepository.findById(id).orElseThrow { ResultNotFoundException(id) }
-        if (result.point.userId != userId.get()) {
-            throw ForbiddenException()
-        }
         return resultAssembler.toModel(result)
     }
 
     @ResponseBody
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/results")
-    fun all(@CookieValue userId: Optional<Long>): CollectionModel<EntityModel<Result>> {
-        userId.orElseThrow { UnauthorizedException() }
-        val list = resultRepository.findByPointUserId(userId.get()).map { resultAssembler.toModel(it) }
+    fun all(): CollectionModel<EntityModel<Result>> {
+        val list = resultRepository.findAll().map { resultAssembler.toModel(it) }
         return CollectionModel(list,
-                linkTo(methodOn(ResultController::class.java).all(userId)).withRel("results"))
+                linkTo(methodOn(ResultController::class.java).all()).withRel("results"))
     }
 }
+*/
