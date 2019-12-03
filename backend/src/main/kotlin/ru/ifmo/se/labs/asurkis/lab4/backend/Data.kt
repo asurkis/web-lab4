@@ -1,5 +1,6 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -7,8 +8,10 @@ import javax.persistence.*
 data class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @JsonIgnore
         var id: Long = 0,
         var name: String = "",
+        @JsonIgnore
         var passwordHash: String = ""
 )
 
@@ -19,6 +22,7 @@ fun generateHash(password: String): String = password
 data class Point(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @JsonIgnore
         var id: Long = 0,
         @ManyToOne
         var user: User = User(),
@@ -42,6 +46,7 @@ val Point.userId: Long
 data class Result(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @JsonIgnore
         var id: Long = 0,
         @ManyToOne
         var point: Point = Point(),

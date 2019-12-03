@@ -35,13 +35,17 @@ export class SharedDataService {
     }
     for (const r of responseResults._embedded.results) {
       results[r._links.self.href] = r;
+      console.log(r._links.point.href, points[r._links.point.href]);
       r.point = points[r._links.point.href];
     }
+
+    console.log(points, results);
 
     this.points = [];
     for (const idx in points) {
       this.points.push(points[idx]);
     }
+
     this.results = [];
     for (const idx in results) {
       this.results.push(results[idx]);

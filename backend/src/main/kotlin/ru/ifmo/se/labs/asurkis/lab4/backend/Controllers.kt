@@ -7,7 +7,6 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
-/*
 @RestController
 class UserController(val userRepository: UserRepository,
                      val userAssembler: UserAssembler) {
@@ -47,7 +46,7 @@ class PointController(val pointRepository: PointRepository,
     }
 
     @ResponseBody
-    @CrossOrigin("*")
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/points")
     fun all(): CollectionModel<EntityModel<Point>> {
         val list = pointRepository.findAll().map { pointAssembler.toModel(it) }
@@ -76,4 +75,3 @@ class ResultController(val resultRepository: ResultRepository,
                 linkTo(methodOn(ResultController::class.java).all()).withRel("results"))
     }
 }
-*/

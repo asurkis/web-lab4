@@ -28,16 +28,13 @@ class BackendApplication {
         val users = listOf(
                 User(name = "A", passwordHash = generateHash("A")),
                 User(name = "B", passwordHash = generateHash("B")))
+        users.forEach { userRepository.save(it) }
         val points = users.cartesian(1..2)
-                .map { Point(user = it.first, x = it.second.toDouble(), y = it.first.id.toDouble()) }
-        val results = points.cartesian(1..2)
+                .map { Point(user = it.first, x = it.second.toDouble() * 2 - 3, y = it.first.id.toDouble() * 2 - 3) }
+        points.forEach { pointRepository.save(it) }
+        val results = points.cartesian(3..4)
                 .map { Result(point = it.first, radius = it.second.toDouble()) }
-
-        for (r in results) {
-            userRepository.save(r.point.user)
-            pointRepository.save(r.point)
-            resultRepository.save(r)
-        }
+        results.forEach { resultRepository.save(it) }
     }
 }
 

@@ -1,1 +1,29 @@
-<p>results-table works!</p>
+<p-table [value]="shared.results">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Удалить?</th>
+      <th>X</th>
+      <th>Y</th>
+      <th>Радиус</th>
+      <th>Попадает?</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-result>
+    <tr>
+      <td>
+      </td>
+      <td>
+        {{ result.point.x }}
+      </td>
+      <td>
+        {{ result.point.y }}
+      </td>
+      <td>
+        {{ result.radius }}
+      </td>
+      <td>
+        {{ result.result ? 'Да' : 'Нет' }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
