@@ -21,4 +21,10 @@ export class RegisterComponent implements OnInit {
       this.router.navigateByUrl('/');
     }
   }
+
+  register() {
+    this.shared.register().subscribe(
+      next => { this.router.navigateByUrl('/'); }
+    );
+  }
 }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Point, Result } from './data-types';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,6 @@ export class SharedDataService {
   isAttemptingLogin = false;
   authError = false;
   authenticated = false;
-  lastAuthToken: string;
   selectedRadius: number;
   username: string;
   password: string;
@@ -21,30 +21,18 @@ export class SharedDataService {
   backendUrl = 'http://localhost:8080';
 
   constructor(
-    private http: HttpClient,
-    private router: Router
+    private http: HttpClient
   ) { }
 
-  async xAuthToken(): Promise<string> {
-    if (!this.lastAuthToken) {
-      try {
-        const response: any = await this.http.get(this.backendUrl + '/token').toPromise();
-        this.lastAuthToken = response.token;
-      } catch (e) {
-        console.log(e);
-      } finally {
-        console.log('finally');
-      }
-    }
-    return this.lastAuthToken;
-  }
-
   async fetchResults() {
-    const headers = new HttpHeaders({
-      'X-Auth-Token': await this.xAuthToken()
-    });
-    const requestPoints = this.http.get(this.backendUrl + '/points', { headers }).toPromise();
-    const requestResults = this.http.get(this.backendUrl + '/results', { headers }).toPromise();
+    const requestPoints = this.http.get(this.backendUrl + '/points', {
+      withCredentials: true,
+      responseType: 'json',
+    }).toPromise();
+    const requestResults = this.http.get(this.backendUrl + '/results', {
+      withCredentials: true,
+      responseType: 'json',
+    }).toPromise();
     const responsePoints: any = await requestPoints;
     const responseResults: any = await requestResults;
 
@@ -68,34 +56,43 @@ export class SharedDataService {
   async pushResults() {
   }
 
-  async login() {
-    const headers = new HttpHeaders().set('X-Auth-Token', await this.xAuthToken());
+  register(): Observable<object> {
     const formData = new FormData();
     formData.append('username', this.username);
     formData.append('password', this.password);
-    try {
-      this.isAttemptingLogin = true;
-      const resp = await this.http.post(this.backendUrl + '/login', formData, { headers }).toPromise()
-      this.authenticated = true;
-      this.authError = false;
-      this.router.navigateByUrl('/');
-    } catch (err) {
-      this.authError = true;
-    } finally {
-      this.isAttemptingLogin = false;
-    }
+    this.isAttemptingLogin = true;
+    return this.http.post(this.backendUrl + '/register', formData, { withCredentials: true }).pipe(tap(
+      next => {
+        this.authError = false;
+        this.authenticated = true;
+      },
+      error => {
+        this.authError = true;
+      },
+      () => { this.isAttemptingLogin = false; }
+    ));
   }
 
-  async logout() {
-    this.http.get(this.backendUrl + '/logout').toPromise()
-      .then(r => console.log('then', r), e => console.log('catch', e))
-      .finally(() => console.log('finally'));
+  login(): Observable<object> {
+    const formData = new FormData();
+    formData.append('username', this.username);
+    formData.append('password', this.password);
+    this.isAttemptingLogin = true;
+    return this.http.post(this.backendUrl + '/login', formData, { withCredentials: true }).pipe(tap(
+      next => {
+        this.authError = false;
+        this.authenticated = true;
+      },
+      error => {
+        this.authError = true;
+      },
+      () => { this.isAttemptingLogin = false; }
+    ));
   }
 
-  async register() {
-    this.http.post(this.backendUrl + '/register', `username=${this.username}&password=${this.password}`).toPromise()
-      .then(r => console.log('then', r))
-      .catch(e => console.log('catch', e))
-      .finally(() => console.log('finally'));
+  logout(): Observable<object> {
+    return this.http.get(this.backendUrl + '/logout').pipe(tap(
+      () => { this.authenticated = false; }
+    ));
   }
 }

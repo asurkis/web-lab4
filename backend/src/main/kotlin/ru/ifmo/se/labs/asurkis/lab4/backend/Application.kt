@@ -11,8 +11,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.session.web.http.HeaderHttpSessionIdResolver
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
@@ -21,20 +25,45 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.services.UserService
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(val userService: UserService,
                             val passwordEncoder: BCryptPasswordEncoder) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
+        val loginSuccessHandler = object : SimpleUrlAuthenticationSuccessHandler() {
+            override fun onAuthenticationSuccess(request: HttpServletRequest?,
+                                                 response: HttpServletResponse?,
+                                                 authentication: Authentication?) {
+            }
+        }
+
+        val loginFailureHandler = object : SimpleUrlAuthenticationFailureHandler() {
+            override fun onAuthenticationFailure(request: HttpServletRequest?,
+                                                 response: HttpServletResponse?,
+                                                 exception: AuthenticationException?) {
+            }
+        }
+
+        val logoutSuccessHandler = object : SimpleUrlLogoutSuccessHandler() {
+            override fun onLogoutSuccess(request: HttpServletRequest?,
+                                         response: HttpServletResponse?,
+                                         authentication: Authentication?) {
+            }
+        }
+
         http!!
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/token", "/register").permitAll()
+                .antMatchers("/register").permitAll()
                 .anyRequest().authenticated()
                 .and().cors()
                 .and().formLogin()
-                .and().logout().logoutUrl("/logout")
+                .successHandler(loginSuccessHandler)
+                .failureHandler(loginFailureHandler)
+                .and().logout().logoutSuccessHandler(logoutSuccessHandler)
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
@@ -67,17 +96,18 @@ class Application {
     }
 
     @Bean
-    fun corsConfigurer(): WebMvcConfigurer {
-        class Configurer : WebMvcConfigurer {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200")
-            }
+    fun corsConfigurer() = object : WebMvcConfigurer {
+        override fun addCorsMappings(registry: CorsRegistry) {
+            registry.addMapping("/**")
+                    .allowCredentials(true)
+                    .allowedHeaders("*")
+                    .allowedMethods("*")
+                    .allowedOrigins("http://localhost:4200")
         }
-        return Configurer()
     }
 
-    @Bean
-    fun sessionStrategy() = HeaderHttpSessionIdResolver.xAuthToken()
+//    @Bean
+//    fun sessionStrategy() = HeaderHttpSessionIdResolver.xAuthToken()
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()

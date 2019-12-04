@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.shared.login();
+    this.shared.login().subscribe(
+      next => { this.router.navigateByUrl('/'); },
+    );
   }
 }

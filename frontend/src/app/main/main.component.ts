@@ -20,11 +20,12 @@ export class MainComponent implements OnInit {
       this.router.navigateByUrl('/login');
       return;
     }
-
     this.shared.fetchResults();
   }
 
   logout() {
-
+    this.shared.logout().subscribe(
+      () => { this.router.navigateByUrl('/login'); }
+    );
   }
 }

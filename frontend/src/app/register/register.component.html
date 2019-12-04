@@ -14,5 +14,5 @@
     Пароли не совпадают
 </p>
 <p>
-  <button pButton type="button" label="Зарегистрироваться" [disabled]="shared.isAttemptingLogin || shared.password !== confirmPassword" (click)="shared.register($event)"></button>
+  <button pButton type="button" label="Зарегистрироваться" [disabled]="shared.isAttemptingLogin || shared.password !== confirmPassword" (click)="register()"></button>
 </p>
