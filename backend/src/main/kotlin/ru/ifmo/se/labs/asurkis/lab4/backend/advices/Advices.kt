@@ -10,6 +10,11 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.*
 @ControllerAdvice
 class Advices {
     @ResponseBody
+    @ExceptionHandler(BindingResultException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun bindingResultHandler(e: BindingResultException) = e.message
+
+    @ResponseBody
     @ExceptionHandler(UserNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun userNotFoundHandler(e: UserNotFoundException) = e.message

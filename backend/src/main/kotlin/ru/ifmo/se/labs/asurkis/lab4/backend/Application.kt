@@ -21,9 +21,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
+import ru.ifmo.se.labs.asurkis.lab4.backend.data.Role
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
+import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.RoleRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.services.UserService
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -33,7 +35,7 @@ import javax.servlet.http.HttpServletResponse
 class SecurityConfiguration(val userService: UserService,
                             val passwordEncoder: BCryptPasswordEncoder) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
-        val loginSuccessHandler = object : SimpleUrlAuthenticationSuccessHandler() {
+        /* val loginSuccessHandler = object : SimpleUrlAuthenticationSuccessHandler() {
             override fun onAuthenticationSuccess(request: HttpServletRequest?,
                                                  response: HttpServletResponse?,
                                                  authentication: Authentication?) {
@@ -45,7 +47,7 @@ class SecurityConfiguration(val userService: UserService,
                                                  response: HttpServletResponse?,
                                                  exception: AuthenticationException?) {
             }
-        }
+        } */
 
         val logoutSuccessHandler = object : SimpleUrlLogoutSuccessHandler() {
             override fun onLogoutSuccess(request: HttpServletRequest?,
@@ -57,12 +59,12 @@ class SecurityConfiguration(val userService: UserService,
         http!!
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register").permitAll()
+                .antMatchers("/register", "/login").permitAll()
                 .anyRequest().authenticated()
                 .and().cors()
-                .and().formLogin()
-                .successHandler(loginSuccessHandler)
-                .failureHandler(loginFailureHandler)
+                // .and().formLogin()
+                // .successHandler(loginSuccessHandler)
+                // .failureHandler(loginFailureHandler)
                 .and().logout().logoutSuccessHandler(logoutSuccessHandler)
     }
 
@@ -80,12 +82,17 @@ class SecurityConfiguration(val userService: UserService,
 class Application {
     @Bean
     fun initData(userService: UserService,
+                 roleRepository: RoleRepository,
                  pointRepository: PointRepository,
                  resultRepository: ResultRepository,
                  passwordEncoder: BCryptPasswordEncoder) = CommandLineRunner {
         val users = listOf(
-                User(username = "A", password = passwordEncoder.encode("A")),
-                User(username = "B", password = passwordEncoder.encode("B")))
+                User(username = "admin",
+                        password = passwordEncoder.encode("admin"),
+                        roles = mutableListOf("USER", "ADMIN").map { Role(it) }),
+                User(username = "beta",
+                        password = passwordEncoder.encode("beta")))
+        users.forEach { it.roles.map { roleRepository.save(it) } }
         users.forEach { userService.registerNew(it) }
         val points = users.cartesian(1..2)
                 .map { Point(user = it.first, x = it.second.toDouble() * 2 - 3, y = it.first.id.toDouble() * 2 - 3) }

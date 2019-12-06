@@ -1,5 +1,8 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend.exceptions
 
+import org.springframework.validation.ObjectError
+
+class BindingResultException(errors: List<ObjectError?>) : Exception("Errors when parsing form: ${errors.joinToString()}")
 class UserNotFoundException : Exception {
     constructor(id: Long) : super("User $id not found")
     constructor(name: String) : super("User $name not found")

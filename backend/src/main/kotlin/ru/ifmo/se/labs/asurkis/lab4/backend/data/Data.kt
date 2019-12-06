@@ -1,9 +1,22 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
+
+@Entity
+@Table(name = "roles")
+data class Role(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var id: Long = 0,
+        var name: String = "USER"
+) : GrantedAuthority {
+    constructor(name: String) : this(id = 0, name = name)
+    override fun getAuthority() = name
+    override fun equals(other: Any?) = other is Role && other.name == name
+}
 
 @Entity
 @Table(name = "users")
@@ -12,9 +25,12 @@ class User(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long = 0,
         private var username: String = "",
-        private var password: String = ""
+        @JsonIgnore
+        private var password: String = "",
+        @OneToMany
+        var roles: List<Role> = mutableListOf(Role())
 ) : UserDetails {
-    override fun getAuthorities() = mutableListOf(SimpleGrantedAuthority("USER"))
+    override fun getAuthorities() = roles
     override fun isEnabled() = true
     override fun getUsername() = username
     override fun isCredentialsNonExpired() = true
@@ -28,7 +44,6 @@ class User(
 data class Point(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @JsonIgnore
         var id: Long = 0,
         @ManyToOne
         @JsonIgnore
@@ -53,7 +68,6 @@ val Point.userId: Long
 data class Result(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @JsonIgnore
         var id: Long = 0,
         @ManyToOne
         var point: Point = Point(),
