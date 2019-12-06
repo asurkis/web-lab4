@@ -30,21 +30,8 @@ export class SharedDataService {
     });
   }
 
-  async fetchResults() {
-    const responsePoints: any = await this.http.get(this.backendUrl + '/me/points', {
-      withCredentials: true,
-      responseType: 'json',
-    }).toPromise();
-
-    if (!responsePoints._embedded) {
-      this.points = [];
-      this.results = [];
-      return;
-    }
-
-    const points = responsePoints._embedded.points;
+  async fetchResultsOfPoints(points: any[]): any[] {
     const results = [];
-
     for (const p of points) {
       p.requestResults = this.http.get(p._links.results.href, {
         withCredentials: true,
@@ -59,6 +46,23 @@ export class SharedDataService {
         r.point = p;
       }
     }
+    return results;
+  }
+
+  async fetchResults() {
+    const responsePoints: any = await this.http.get(this.backendUrl + '/me/points', {
+      withCredentials: true,
+      responseType: 'json',
+    }).toPromise();
+
+    if (!responsePoints._embedded) {
+      this.points = [];
+      this.results = [];
+      return;
+    }
+
+    const points = responsePoints._embedded.points;
+    const results = await this.fetchResultsOfPoints(points);
 
     this.points = points;
     this.results = results;
@@ -69,15 +73,29 @@ export class SharedDataService {
   }
 
   async pushRequest({ x, y }: Point) {
-    const formData = new FormData();
-    formData.append('x', '' + x);
-    formData.append('y', '' + y);
-    formData.append('r', '' + this.selectedRadius);
-    this.http.post(this.backendUrl + '/add', formData, { withCredentials: true }).subscribe(
-      next => console.log(next),
-      err => console.log(err),
-      () => console.log('complete'),
-    );
+    try {
+      const responsePoints: any = await this.http.post(this.backendUrl + '/add', [{
+        x: +x,
+        y: +y,
+        rs: [ this.selectedRadius ]
+      }], {
+        withCredentials: true
+      }).toPromise();
+
+      if (!responsePoints._embedded) {
+        return;
+      }
+
+      const points = responsePoints._embedded.points;
+      const results = await this.fetchResultsOfPoints(points);
+
+      for (const p of points) {
+        this.points.push(p);
+      }
+      for (const r of results) {
+        this.results.push(r);
+      }
+    } finally {}
   }
 
   async registerOrLogin(what: string): Promise<any> {
@@ -86,8 +104,13 @@ export class SharedDataService {
     formData.append('password', this.password);
     this.isAttemptingLogin = true;
     try {
-      const result = await this.http.post(this.backendUrl + '/' + what,
-          formData, { observe: 'response', withCredentials: true }).toPromise();
+      const result = await this.http.post(this.backendUrl + '/' + what, {
+        username: this.username,
+        password: this.password
+      }, {
+        observe: 'response',
+        withCredentials: true
+      }).toPromise();
       return result;
     } catch (err) {
       this.authError = true;

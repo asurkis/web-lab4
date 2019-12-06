@@ -9,10 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.ifmo.se.labs.asurkis.lab4.backend.assemblers.UserAssembler
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Role
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
@@ -31,7 +28,7 @@ class UserController(val userService: UserService,
                      val userAssembler: UserAssembler,
                      val authenticationManager: AuthenticationManager) {
     @PostMapping("/register")
-    fun register(@Valid userForm: UserForm,
+    fun register(@Valid @RequestBody userForm: UserForm,
                  bindingResult: BindingResult,
                  session: HttpSession) {
         if (bindingResult.hasErrors()) {
@@ -46,7 +43,7 @@ class UserController(val userService: UserService,
     }
 
     @PostMapping("/login")
-    fun login(@Valid userForm: UserForm,
+    fun login(@Valid @RequestBody userForm: UserForm,
               bindingResult: BindingResult,
               session: HttpSession) {
         if (bindingResult.hasErrors()) {
