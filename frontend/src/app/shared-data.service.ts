@@ -9,7 +9,6 @@ export class SharedDataService {
   authAttemptPromise: Promise<any>;
   isAttemptingLogin: boolean;
   authError = false;
-  authenticated: boolean;
   selectedRadius = 0;
   username = '';
   password = '';
@@ -25,42 +24,44 @@ export class SharedDataService {
     this.isAttemptingLogin = true;
     this.authAttemptPromise = new Promise((resolve, reject) => {
       http.get(this.backendUrl + '/me', { withCredentials: true, responseType: 'json' }).toPromise()
-        .then(r => { resolve(r); this.authenticated = true; })
-        .catch(r => { reject(r); this.authenticated = false; })
+        .then(r => resolve(r))
+        .catch(r => reject(r))
         .finally(() => this.isAttemptingLogin = false);
     });
   }
 
   async fetchResults() {
-    try {
-      const responsePoints: any = await this.http.get(this.backendUrl + '/me/points', {
-        withCredentials: true,
-        responseType: 'json',
-      }).toPromise();
+    const responsePoints: any = await this.http.get(this.backendUrl + '/me/points', {
+      withCredentials: true,
+      responseType: 'json',
+    }).toPromise();
 
-      const points = responsePoints._embedded.points;
-      const results = [];
-
-      for (const p of points) {
-        p.requestResults = this.http.get(p._links.results.href, {
-          withCredentials: true,
-          responseType: 'json'
-        }).toPromise();
-      }
-
-      for (const p of points) {
-        const responseResults = await p.requestResults;
-        for (const r of responseResults._embedded.results) {
-          results.push(r);
-          r.point = p;
-        }
-      }
-
-      this.points = points;
-      this.results = results;
-    } catch (err) {
-      console.log(err);
+    if (!responsePoints._embedded) {
+      this.points = [];
+      this.results = [];
+      return;
     }
+
+    const points = responsePoints._embedded.points;
+    const results = [];
+
+    for (const p of points) {
+      p.requestResults = this.http.get(p._links.results.href, {
+        withCredentials: true,
+        responseType: 'json'
+      }).toPromise();
+    }
+
+    for (const p of points) {
+      const responseResults = await p.requestResults;
+      for (const r of responseResults._embedded.results) {
+        results.push(r);
+        r.point = p;
+      }
+    }
+
+    this.points = points;
+    this.results = results;
   }
 
   async pushChanges() {
@@ -87,7 +88,6 @@ export class SharedDataService {
     try {
       const result = await this.http.post(this.backendUrl + '/' + what,
           formData, { observe: 'response', withCredentials: true }).toPromise();
-      this.authenticated = true;
       return result;
     } catch (err) {
       this.authError = true;
@@ -106,12 +106,11 @@ export class SharedDataService {
   }
 
   logout(): Promise<any> {
-    return this.authAttemptPromise = new Promise((resolve, reject) => {
+    return this.authAttemptPromise = new Promise((_, reject) => {
       this.http.get(this.backendUrl + '/logout', {
         withCredentials: true,
         responseType: 'json'
       }).toPromise().finally(() => {
-        this.authenticated = false;
         reject();
       });
     });

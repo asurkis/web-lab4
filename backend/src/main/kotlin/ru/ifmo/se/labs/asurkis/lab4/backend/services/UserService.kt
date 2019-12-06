@@ -7,15 +7,18 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
 import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.UserAlreadyExistsException
 import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.UserNotFoundException
 import ru.ifmo.se.labs.asurkis.lab4.backend.forms.UserForm
+import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.RoleRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.UserRepository
 
 @Service
-class UserService(val userRepository: UserRepository,
+class UserService(val roleRepository: RoleRepository,
+                  val userRepository: UserRepository,
                   val passwordEncoder: BCryptPasswordEncoder) : UserDetailsService {
     fun registerNew(user: User): User {
         if (userRepository.findByUsername(user.username).isPresent) {
             throw UserAlreadyExistsException(user.username)
         }
+        user.authorities.forEach { roleRepository.save(it) }
         return userRepository.save(user)
     }
 

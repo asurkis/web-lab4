@@ -82,7 +82,6 @@ class SecurityConfiguration(val userService: UserService,
 class Application {
     @Bean
     fun initData(userService: UserService,
-                 roleRepository: RoleRepository,
                  pointRepository: PointRepository,
                  resultRepository: ResultRepository,
                  passwordEncoder: BCryptPasswordEncoder) = CommandLineRunner {
@@ -92,7 +91,6 @@ class Application {
                         roles = mutableListOf("USER", "ADMIN").map { Role(it) }),
                 User(username = "beta",
                         password = passwordEncoder.encode("beta")))
-        users.forEach { it.roles.map { roleRepository.save(it) } }
         users.forEach { userService.registerNew(it) }
         val points = users.cartesian(1..2)
                 .map { Point(user = it.first, x = it.second.toDouble() * 2 - 3, y = it.first.id.toDouble() * 2 - 3) }
