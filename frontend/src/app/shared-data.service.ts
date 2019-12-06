@@ -30,7 +30,7 @@ export class SharedDataService {
     });
   }
 
-  async fetchResultsOfPoints(points: any[]): any[] {
+  async fetchResultsOfPoints(points: any[]): Promise<any[]> {
     const results = [];
     for (const p of points) {
       p.requestResults = this.http.get(p._links.results.href, {
