@@ -24,6 +24,15 @@ export class ResultsPictureComponent {
     private shared: SharedDataService
   ) { }
 
+  handleClick(event) {
+    const rect = document.querySelector('svg').getBoundingClientRect();
+    const clientX = event.x - rect.left;
+    const clientY = event.y - rect.top;
+    const x = clientX / this.scale - this.maxCoord - 1;
+    const y = this.maxCoord + 1 - clientY / this.scale;
+    this.shared.pushRequest({ x, y });
+  }
+
   translateX(x: number): number {
     return (x - this.displayRect.left) * this.scale;
   }

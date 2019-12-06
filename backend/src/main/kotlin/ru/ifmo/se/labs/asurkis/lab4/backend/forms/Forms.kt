@@ -5,13 +5,13 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
-class UserForm(
+data class UserForm(
         @NotEmpty
         var username: String,
         @NotEmpty
         var password: String)
 
-class RequestForm(
+data class RequestForm(
         @NotNull
         @Min(-4)
         @Max(4)
@@ -25,9 +25,10 @@ class RequestForm(
         @Max(4)
         var rs: List<Double>)
 
-class ResultChangeForm(
+data class ResultChangeForm(
         @NotNull
         var id: Long,
+        var toDelete: Boolean,
         @NotNull
         @Min(0)
         @Max(4)

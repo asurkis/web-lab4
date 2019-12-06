@@ -1,5 +1,7 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend.repositories
 
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
@@ -21,6 +23,9 @@ interface PointRepository : CrudRepository<Point, Long> {
     fun findByIdAndUserId(id: Long, userId: Long): Optional<Point>
     fun findByUserId(id: Long): Iterable<Point>
     fun findByUser(user: User): Iterable<Point>
+    @Modifying
+    @Query("DELETE FROM Point p WHERE 0=(SELECT COUNT(r.id) FROM Result r WHERE p=r.point)")
+    fun deleteEmpty();
 }
 
 @Component

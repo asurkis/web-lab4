@@ -1,4 +1,4 @@
-<svg [attr.width]="pictureWidth" [attr.height]="pictureHeight">
+<svg [attr.width]="pictureWidth" [attr.height]="pictureHeight" (click)="handleClick($event)">
   <g *ngIf="radius" id="figure">
     <path [attr.d]="''
         + ' M ' + pictureCoord(0, 0)

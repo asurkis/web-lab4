@@ -5,6 +5,7 @@ import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import ru.ifmo.se.labs.asurkis.lab4.backend.assemblers.PointAssembler
 import ru.ifmo.se.labs.asurkis.lab4.backend.assemblers.ResultAssembler
@@ -59,6 +60,7 @@ class ResultController(val pointRepository: PointRepository,
     fun myAll(@PathVariable pointId: Long,
               @AuthenticationPrincipal user: User) = all(user.id, pointId, user)
 
+    @Transactional
     @PostMapping("/add")
     fun addResults(@Valid @RequestBody requests: Iterable<RequestForm>,
                    @AuthenticationPrincipal user: User): CollectionModel<EntityModel<Point>> {
@@ -76,22 +78,25 @@ class ResultController(val pointRepository: PointRepository,
                 linkTo(methodOn(UserController::class.java).one(user.id, user)).withRel("owner"))
     }
 
+    @Transactional
     @PostMapping("/change")
     fun changeResults(@Valid @RequestBody changes: Iterable<ResultChangeForm>,
-                      @AuthenticationPrincipal user: User): CollectionModel<EntityModel<Result>> {
+                      @AuthenticationPrincipal user: User) {
         val isAdmin = user.authorities.contains(Role("ADMIN"))
-        val resultsToChange = changes.map {
-            val result = resultRepository.findById(it.id).orElseThrow { ResultNotFoundException(it.id) }
+
+        for (change in changes) {
+            val result = resultRepository.findById(change.id).orElseThrow { ResultNotFoundException(change.id) }
             if (!isAdmin && result.userId != user.id) {
                 throw ForbiddenException()
             }
-            result.radius = it.radius
-            result
+            if (change.toDelete) {
+                println("Deleting " + result)
+                resultRepository.deleteById(result.id)
+            } else {
+                result.radius = change.radius
+                resultRepository.save(result)
+            }
         }
-        resultRepository.saveAll(resultsToChange)
-
-        val foundResults = resultRepository.findByPointUserId(user.id)
-        return CollectionModel(foundResults.map { resultAssembler.toModel(it) },
-                linkTo(methodOn(UserController::class.java).one(user.id, user)).withRel("owner"))
+        pointRepository.deleteEmpty()
     }
 }
