@@ -7,17 +7,14 @@ import { Result } from '../data-types';
   templateUrl: './results-table.component.html',
   styleUrls: ['./results-table.component.css']
 })
-export class ResultsTableComponent implements OnInit {
+export class ResultsTableComponent {
   results: Result[] = [];
 
   constructor(
     private shared: SharedDataService
   ) { }
 
-  ngOnInit() {
-  }
-
   handleClick() {
-    this.shared.pushResults();
+    this.shared.pushChanges();
   }
 }

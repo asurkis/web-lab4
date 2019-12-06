@@ -7,7 +7,7 @@ import { SharedDataService } from '../shared-data.service';
   templateUrl: './user-input.component.html',
   styleUrls: ['./user-input.component.css']
 })
-export class UserInputComponent implements OnInit {
+export class UserInputComponent {
   x = '0';
   y = '0';
   validXs: SelectItem[] = [];
@@ -35,15 +35,8 @@ export class UserInputComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
   handleClick() {
-    console.log({
-      x: this.x,
-      y: this.y,
-      r: this.r,
-    });
+    this.sharedData.pushRequest({ x: +this.x, y: +this.y });
   }
 
   get r(): string {

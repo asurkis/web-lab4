@@ -16,7 +16,8 @@ class UserAssembler : RepresentationModelAssembler<User, EntityModel<User>> {
     override fun toModel(user: User): EntityModel<User> {
         return EntityModel(user,
                 linkTo(methodOn(UserController::class.java).one(user.id, user)).withSelfRel(),
-                linkTo(methodOn(UserController::class.java).all(user)).withRel("all"))
+                linkTo(methodOn(UserController::class.java).all(user)).withRel("all"),
+                linkTo(methodOn(PointController::class.java).all(user.id, user)).withRel("points"))
     }
 
 }
@@ -27,7 +28,8 @@ class PointAssembler : RepresentationModelAssembler<Point, EntityModel<Point>> {
         return EntityModel(point,
                 linkTo(methodOn(PointController::class.java).one(point.userId, point.id, point.user)).withSelfRel(),
                 linkTo(methodOn(PointController::class.java).all(point.userId, point.user)).withRel("all"),
-                linkTo(methodOn(UserController::class.java).one(point.userId, point.user)).withRel("owner"))
+                linkTo(methodOn(UserController::class.java).one(point.userId, point.user)).withRel("owner"),
+                linkTo(methodOn(ResultController::class.java).all(point.userId, point.id, point.user)).withRel("results"))
     }
 }
 

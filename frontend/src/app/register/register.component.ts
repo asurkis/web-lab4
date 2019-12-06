@@ -7,24 +7,18 @@ import { SharedDataService } from '../shared-data.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
-  confirmPassword: string;
+export class RegisterComponent {
+  confirmPassword = '';
 
   constructor(
     private shared: SharedDataService,
     private router: Router
-  ) { }
-
-  ngOnInit() {
-    this.shared.authError = false;
-    if (this.shared.authenticated) {
-      this.router.navigateByUrl('/');
-    }
+  ) {
+    shared.authError = false;
+    this.shared.authAttemptPromise.then(_ => this.router.navigateByUrl('/')).catch(_ => {});
   }
 
   register() {
-    this.shared.register().subscribe(
-      next => { this.router.navigateByUrl('/'); }
-    );
+    this.shared.register().then(_ => { this.router.navigateByUrl('/'); }).catch(_ => {});
   }
 }

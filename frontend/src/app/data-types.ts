@@ -1,9 +1,11 @@
 export interface Point {
+  id?: number;
   x: number;
   y: number;
 }
 
 export interface Result {
+  id?: number;
   point: Point;
   radius: number;
   result: boolean;

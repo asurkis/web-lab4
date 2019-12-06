@@ -7,7 +7,7 @@ import { Point, pointFitsIntoRadius } from '../data-types';
   templateUrl: './results-picture.component.html',
   styleUrls: ['./results-picture.component.css']
 })
-export class ResultsPictureComponent implements OnInit {
+export class ResultsPictureComponent {
   scale = 50;
   displayRect = {
     left: -6,
@@ -23,9 +23,6 @@ export class ResultsPictureComponent implements OnInit {
   constructor(
     private shared: SharedDataService
   ) { }
-
-  ngOnInit() {
-  }
 
   translateX(x: number): number {
     return (x - this.displayRect.left) * this.scale;

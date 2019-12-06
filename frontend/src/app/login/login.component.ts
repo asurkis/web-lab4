@@ -7,22 +7,16 @@ import { SharedDataService } from '../shared-data.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   constructor(
     private shared: SharedDataService,
     private router: Router
-  ) { }
-
-  ngOnInit() {
+  ) {
     this.shared.authError = false;
-    if (this.shared.authenticated) {
-      this.router.navigateByUrl('/');
-    }
+    this.shared.authAttemptPromise.then(_ => this.router.navigateByUrl('/')).catch(_ => {});
   }
 
   login() {
-    this.shared.login().subscribe(
-      next => { this.router.navigateByUrl('/'); },
-    );
+    this.shared.login().then(_ => { this.router.navigateByUrl('/'); }).catch(_ => {});
   }
 }
