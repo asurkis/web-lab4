@@ -2,11 +2,11 @@
   При попытке входа возникла ошибка
 </p>
 <p>
-  <input [(ngModel)]="shared.username" type="text" pInputText>
+  <input type="text" pInputText [(ngModel)]="shared.username">
 </p>
 <p>
-  <input [(ngModel)]="shared.password" type="password" pPassword>
+  <input type="password" pPassword [(ngModel)]="shared.password" [feedback]="false">
 </p>
 <p>
-  <button pButton type="button" label="Войти" [disabled]="shared.isAttemptingLogin" (click)="login()"></button>
+  <button type="button" pButton label="Войти" [disabled]="shared.isAttemptingLogin" (click)="login()"></button>
 </p>

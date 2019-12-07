@@ -1,7 +1,9 @@
-<p-table [value]="shared.results">
+<p-table [value]="shared.results" [autoLayout]="true" [paginator]="true" [rows]="10" [(selection)]="toDeleteList">
   <ng-template pTemplate="header">
     <tr>
-      <th>Удалить?</th>
+      <th style="width: 1px">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <th>X</th>
       <th>Y</th>
       <th>Радиус</th>
@@ -9,8 +11,9 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-result>
-    <tr>
+    <tr [pSelectableRow]="result">
       <td>
+        <p-tableCheckbox [value]="result"></p-tableCheckbox>
       </td>
       <td>
         {{ result.point.x }}
@@ -19,7 +22,7 @@
         {{ result.point.y }}
       </td>
       <td>
-        {{ result.radius }}
+        <p-spinner [(ngModel)]="result.radius" min="0" max="4" step="0.01"></p-spinner>
       </td>
       <td>
         {{ result.result ? 'Да' : 'Нет' }}

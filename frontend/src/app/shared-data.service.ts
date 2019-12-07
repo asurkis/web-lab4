@@ -30,7 +30,7 @@ export class SharedDataService {
     });
   }
 
-  async fetchResultsOfPoints(points: any[]): Promise<any[]> {
+  async fetchResultsOfPoint(points: any[]): Promise<any[]> {
     const results = [];
     for (const p of points) {
       p.requestResults = this.http.get(p._links.results.href, {
@@ -43,6 +43,7 @@ export class SharedDataService {
       const responseResults = await p.requestResults;
       for (const r of responseResults._embedded.results) {
         results.push(r);
+        r.toDelete = false;
         r.point = p;
       }
     }
@@ -62,14 +63,25 @@ export class SharedDataService {
     }
 
     const points = responsePoints._embedded.points;
-    const results = await this.fetchResultsOfPoints(points);
+    const results = await this.fetchResultsOfPoint(points);
 
     this.points = points;
     this.results = results;
   }
 
   async pushChanges() {
-
+    try {
+      const responseResults: any = await this.http.post(this.backendUrl + '/change', this.results.map(r => ({
+        id: r.id,
+        toDelete: r.toDelete === true,
+        radius: r.radius
+      })), {
+        withCredentials: true
+      }).toPromise();
+      await this.fetchResults();
+    } catch (err) {
+      console.log(err);
+    } finally {}
   }
 
   async pushRequest({ x, y }: Point) {
@@ -87,7 +99,7 @@ export class SharedDataService {
       }
 
       const points = responsePoints._embedded.points;
-      const results = await this.fetchResultsOfPoints(points);
+      const results = await this.fetchResultsOfPoint(points);
 
       for (const p of points) {
         this.points.push(p);

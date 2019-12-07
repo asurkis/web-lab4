@@ -8,7 +8,7 @@
   <input pPassword [(ngModel)]="shared.password" type="password">
 </p>
 <p>
-  <input pPassword [(ngModel)]="confirmPassword" type="password">
+  <input pPassword [(ngModel)]="confirmPassword" type="password" [feedback]="false">
 </p>
 <p [style.color]="'red'" [hidden]="shared.password === confirmPassword">
     Пароли не совпадают

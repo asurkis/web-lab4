@@ -1,3 +1,7 @@
+svg {
+  user-select: none;
+}
+
 #figure * {
   fill: aquamarine;
 }

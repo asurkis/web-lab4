@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
-import { Result } from '../data-types';
 
 @Component({
   selector: 'app-results-table',
@@ -8,13 +7,16 @@ import { Result } from '../data-types';
   styleUrls: ['./results-table.component.css']
 })
 export class ResultsTableComponent {
-  results: Result[] = [];
+  toDeleteList = [];
 
   constructor(
     private shared: SharedDataService
   ) { }
 
   handleClick() {
+    for (const r of this.toDeleteList) {
+      r.toDelete = true;
+    }
     this.shared.pushChanges();
   }
 }

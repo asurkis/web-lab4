@@ -6,6 +6,7 @@ export interface Point {
 
 export interface Result {
   id?: number;
+  toDelete: boolean;
   point: Point;
   radius: number;
   result: boolean;

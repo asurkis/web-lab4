@@ -6,10 +6,12 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { SliderModule } from 'primeng/slider';
+import { SpinnerModule } from 'primeng/spinner';
 import { TableModule } from 'primeng/table';
 
 import { AppComponent } from './app.component';
@@ -42,10 +44,12 @@ import { RegisterComponent } from './register/register.component';
     ]),
     HttpClientModule,
     ButtonModule,
+    CheckboxModule,
     DropdownModule,
     InputTextModule,
     PasswordModule,
     SliderModule,
+    SpinnerModule,
     TableModule,
   ],
   providers: [],
