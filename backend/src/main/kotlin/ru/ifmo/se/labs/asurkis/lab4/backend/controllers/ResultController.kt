@@ -90,7 +90,6 @@ class ResultController(val pointRepository: PointRepository,
                 throw ForbiddenException()
             }
             if (change.toDelete) {
-                println("Deleting " + result)
                 resultRepository.deleteById(result.id)
             } else {
                 result.radius = change.radius

@@ -5,7 +5,7 @@
 <p>Координата Y</p>
 <p>
   <span class="ui-float-label">
-    <input pInputText id="inputY" type="text" [(ngModel)]="y">
+    <input type="text" pInputText id="inputY" [(ngModel)]="y">
     <label for="inputY">Введите число от {{ validYs.min }} до {{ validYs.max }}</label>
   </span>
 </p>
@@ -14,5 +14,5 @@
   <p-dropdown [options]="validRs" [(ngModel)]="r"></p-dropdown>
 </p>
 <p>
-  <button pButton type="button" label="Отправить" [disabled]="!isFormValid" (click)="handleClick()"></button>
+  <button type="submit" pButton label="Отправить" [disabled]="!isFormValid" (click)="handleClick()"></button>
 </p>

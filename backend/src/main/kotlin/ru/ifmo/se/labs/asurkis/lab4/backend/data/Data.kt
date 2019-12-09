@@ -27,6 +27,7 @@ class User(
         private var username: String = "",
         @JsonIgnore
         private var password: String = "",
+        @JsonIgnore
         @OneToMany
         var roles: List<Role> = mutableListOf(Role())
 ) : UserDetails {

@@ -24,7 +24,10 @@ export class SharedDataService {
     this.isAttemptingLogin = true;
     this.authAttemptPromise = new Promise((resolve, reject) => {
       http.get(this.backendUrl + '/me', { withCredentials: true, responseType: 'json' }).toPromise()
-        .then(r => resolve(r))
+        .then((r: any) => {
+          this.username = r.username;
+          resolve(r);
+        })
         .catch(r => reject(r))
         .finally(() => this.isAttemptingLogin = false);
     });

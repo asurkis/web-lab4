@@ -1,12 +1,31 @@
-<p [hidden]="!shared.authError">
-  При попытке входа возникла ошибка
-</p>
-<p>
-  <input type="text" pInputText [(ngModel)]="shared.username">
-</p>
-<p>
-  <input type="password" pPassword [(ngModel)]="shared.password" [feedback]="false">
-</p>
-<p>
-  <button type="button" pButton label="Войти" [disabled]="shared.isAttemptingLogin" (click)="login()"></button>
-</p>
+<div class="p-grid">
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div [style.visibility]="shared.authError ? 'visible' : 'hidden'" class="p-col-10 p-md-8 p-lg-6 p-xl-4">
+    При попытке входа возникла ошибка
+  </div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div class="p-col-10 p-md-8 p-lg-6 p-xl-4">
+    <span class="ui-float-label">
+      <input type="text" pInputText id="inputLogin" [(ngModel)]="shared.username">
+      <label for="inputLogin">Имя пользователя</label>
+    </span>
+  </div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div class="p-col-10 p-md-8 p-lg-6 p-xl-4">
+    <span class="ui-float-label">
+      <input type="password" pPassword id="inputPassword" [(ngModel)]="shared.password" [feedback]="false">
+      <label for="inputPassword">Пароль</label>
+    </span>
+  </div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+  <div class="p-col-5 p-md-4 p-lg-3 p-xl-2">
+    <button type="submit" pButton label="Войти" [disabled]="shared.isAttemptingLogin" (click)="login()"></button>
+  </div>
+  <div class="p-col-5 p-md-4 p-lg-3 p-xl-2">
+    <button type="button" pButton label="Регистрация" [disabled]="shared.isAttemptingLogin" (click)="router.navigateByUrl('/register')"></button>
+  </div>
+  <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
+</div>
