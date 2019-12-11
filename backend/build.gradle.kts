@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "ru.ifmo.se.labs.asurkis.lab4"
-version = "0.0.1-SNAPSHOT"
+version = "1.0-RELEASE"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 java.targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -38,11 +38,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    runtimeOnly("mysql:mysql-connector-java")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-//    runtimeOnly("com.h2database:h2")
-//	runtimeOnly("com.oracle.ojdbc:ojdbc8")
-	runtimeOnly("mysql:mysql-connector-java")
-//	runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.withType<KotlinCompile> {
