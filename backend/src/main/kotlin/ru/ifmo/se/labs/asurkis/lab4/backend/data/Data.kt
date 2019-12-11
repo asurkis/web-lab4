@@ -16,6 +16,7 @@ data class Role(
     constructor(name: String) : this(id = 0, name = name)
     override fun getAuthority() = name
     override fun equals(other: Any?) = other is Role && other.name == name
+    override fun hashCode() = name.hashCode()
 }
 
 @Entity

@@ -16,7 +16,6 @@ export class MainComponent {
     shared.authAttemptPromise
       .then(_ => shared.fetchResults())
       .catch(_ => router.navigateByUrl('/login'));
-    shared.fetchResults();
   }
 
   logout() {
