@@ -50,12 +50,12 @@
 
   <g *ngIf="radius">
     <circle class="point fits1" cx="12" cy="12" r="5"/>
-    <text x="24" y="18">п÷п╬п©п╟п╢п╟п╣я┌ п╡ я─п╟п╢п╦я┐я│</text>
+    <text x="24" y="18">Попадает в радиус</text>
     <circle class="point fits0" cx="12" cy="36" r="5"/>
-    <text x="24" y="42">п²п╣ п©п╬п©п╟п╢п╟п╣я┌ п╡ я─п╟п╢п╦я┐я│</text>
+    <text x="24" y="42">Не попадает в радиус</text>
   </g>
   <g *ngIf="!radius">
     <circle class="point noRadius" cx="12" cy="12" r="5"/>
-    <text x="24" y="18">п═п╟п╢п╦я┐я│ п╫п╣ п╥п╟п╢п╟п╫</text>
+    <text x="24" y="18">Радиус не задан</text>
   </g>
 </svg>

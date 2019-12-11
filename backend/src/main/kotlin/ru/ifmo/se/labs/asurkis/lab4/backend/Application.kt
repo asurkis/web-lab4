@@ -1,6 +1,5 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend
 
-import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -16,12 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.Point
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.Result
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.Role
-import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
-import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
-import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.services.UserService
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -41,7 +34,7 @@ class SecurityConfiguration(val userService: UserService,
         http!!
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/login", "/test").permitAll()
+                .antMatchers("/register", "/login").permitAll()
                 .anyRequest().authenticated()
                 .and().cors()
                 .and().logout().logoutSuccessHandler(logoutSuccessHandler)
@@ -60,26 +53,6 @@ class SecurityConfiguration(val userService: UserService,
 @SpringBootApplication
 class Application {
     @Bean
-    fun initData(userService: UserService,
-                 pointRepository: PointRepository,
-                 resultRepository: ResultRepository,
-                 passwordEncoder: BCryptPasswordEncoder) = CommandLineRunner {
-        val users = listOf(
-                User(username = "admin",
-                        password = passwordEncoder.encode("admin"),
-                        roles = mutableListOf("USER", "ADMIN").map { Role(it) }),
-                User(username = "beta",
-                        password = passwordEncoder.encode("beta")))
-        users.forEach { userService.registerNew(it) }
-        val points = users.cartesian(1..2)
-                .map { Point(user = it.first, x = it.second.toDouble() * 2 - 3, y = it.first.id.toDouble() * 2 - 3) }
-        points.forEach { pointRepository.save(it) }
-        val results = points.cartesian(3..4)
-                .map { Result(point = it.first, radius = it.second.toDouble()) }
-        results.forEach { resultRepository.save(it) }
-    }
-
-    @Bean
     fun corsConfigurer() = object : WebMvcConfigurer {
         override fun addCorsMappings(registry: CorsRegistry) {
             registry.addMapping("/**")
@@ -92,12 +65,6 @@ class Application {
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
-}
-
-infix fun <A, B> Iterable<A>.cartesian(other: Iterable<B>): List<Pair<A, B>> {
-    val result = mutableListOf<Pair<A, B>>()
-    for (a in this) for (b in other) result.add(Pair(a, b))
-    return result.toList()
 }
 
 fun main(args: Array<String>) {

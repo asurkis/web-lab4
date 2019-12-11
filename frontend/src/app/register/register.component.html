@@ -1,14 +1,14 @@
 <div class="p-grid">
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div [style.visibility]="shared.authError ? 'visible' : 'hidden'" class="p-col-10 p-md-8 p-lg-6 p-xl-4">
-      п÷я─п╦ п©п╬п©я▀я┌п╨п╣ п╡я┘п╬п╢п╟ п╡п╬п╥п╫п╦п╨п╩п╟ п╬я┬п╦п╠п╨п╟
+      При попытке входа возникла ошибка
   </div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div class="p-col-10 p-md-8 p-lg-6 p-xl-4">
     <span class="ui-float-label">
       <input type="text" pInputText id="inputLogin" [(ngModel)]="shared.username">
-      <label for="inputLogin">п≤п╪я▐ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐</label>
+      <label for="inputLogin">Имя пользователя</label>
     </span>
   </div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
@@ -16,7 +16,7 @@
   <div class="p-col-10 p-md-8 p-lg-6 p-xl-4">
     <span class="ui-float-label">
       <input type="password" pPassword id="inputPassword" [(ngModel)]="shared.password">
-      <label for="inputPassword">п÷п╟я─п╬п╩я▄</label>
+      <label for="inputPassword">Пароль</label>
     </span>
   </div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
@@ -24,21 +24,21 @@
   <div class="p-col-10 p-md-8 p-lg-6 p-xl-4">
     <span class="ui-float-label">
       <input type="password" pPassword id="inputConfirmPassword" [(ngModel)]="confirmPassword" [feedback]="false">
-      <label for="inputConfirmPassword">п÷п╬п╡я┌п╬я─п╦я┌п╣ п©п╟я─п╬п╩я▄</label>
+      <label for="inputConfirmPassword">Повторите пароль</label>
     </span>
   </div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div [style.color]="'red'" [style.visibility]="shared.password === confirmPassword ? 'hidden' : 'visible'" class="p-col-10 p-md-8 p-lg-6 p-xl-4">
-      п÷п╟я─п╬п╩п╦ п╫п╣ я│п╬п╡п©п╟п╢п╟я▌я┌
+      Пароли не совпадают
   </div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
   <div class="p-col-5 p-md-4 p-lg-3 p-xl-2">
-    <button type="button" pButton label="п≈п╟я─п╣пЁп╦я│я┌я─п╦я─п╬п╡п╟я┌я▄я│я▐" [disabled]="shared.isAttemptingLogin || shared.password !== confirmPassword" (click)="register()"></button>
+    <button type="button" pButton label="Зарегистрироваться" [disabled]="shared.isAttemptingLogin || shared.password !== confirmPassword" (click)="register()"></button>
   </div>
   <div class="p-col-5 p-md-4 p-lg-3 p-xl-2">
-    <button type="button" pButton label="пё п╪п╣п╫я▐ п╣я│я┌я▄ п╟п╨п╨п╟я┐п╫я┌" [disabled]="shared.isAttemptingLogin" (click)="router.navigateByUrl('/login')"></button>
+    <button type="button" pButton label="У меня есть аккаунт" [disabled]="shared.isAttemptingLogin" (click)="router.navigateByUrl('/login')"></button>
   </div>
   <div class="p-col-1 p-md-2 p-lg-3 p-xl-4"></div>
 </div>

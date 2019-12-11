@@ -39,9 +39,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("com.h2database:h2")
+//    runtimeOnly("com.h2database:h2")
 //	runtimeOnly("com.oracle.ojdbc:ojdbc8")
-//	runtimeOnly("mysql:mysql-connector-java")
+	runtimeOnly("mysql:mysql-connector-java")
 //	runtimeOnly("org.postgresql:postgresql")
 }
 

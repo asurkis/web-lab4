@@ -1,18 +1,18 @@
-<p>п п╬п╬я─п╢п╦п╫п╟я┌п╟ X</p>
+<p>Координата X</p>
 <p>
   <p-dropdown [options]="validXs" [(ngModel)]="x"></p-dropdown>
 </p>
-<p>п п╬п╬я─п╢п╦п╫п╟я┌п╟ Y</p>
+<p>Координата Y</p>
 <p>
   <span class="ui-float-label">
     <input type="text" pInputText id="inputY" [(ngModel)]="y">
-    <label for="inputY">п▓п╡п╣п╢п╦я┌п╣ я┤п╦я│п╩п╬ п╬я┌ {{ validYs.min }} п╢п╬ {{ validYs.max }}</label>
+    <label for="inputY">Введите число от {{ validYs.min }} до {{ validYs.max }}</label>
   </span>
 </p>
-<p>п═п╟п╢п╦я┐я│</p>
+<p>Радиус</p>
 <p>
   <p-dropdown [options]="validRs" [(ngModel)]="r"></p-dropdown>
 </p>
 <p>
-  <button type="submit" pButton label="п·я┌п©я─п╟п╡п╦я┌я▄" [disabled]="!isFormValid" (click)="handleClick()"></button>
+  <button type="submit" pButton label="Отправить" [disabled]="!isFormValid" (click)="handleClick()"></button>
 </p>
