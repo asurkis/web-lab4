@@ -1,6 +1,5 @@
 package ru.ifmo.se.labs.asurkis.lab4.backend.assemblers
 
-import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.RepresentationModelAssembler
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
@@ -19,7 +18,6 @@ class UserAssembler : RepresentationModelAssembler<User, EntityModel<User>> {
                 linkTo(methodOn(UserController::class.java).all(user)).withRel("all"),
                 linkTo(methodOn(PointController::class.java).all(user.id, user)).withRel("points"))
     }
-
 }
 
 @Component

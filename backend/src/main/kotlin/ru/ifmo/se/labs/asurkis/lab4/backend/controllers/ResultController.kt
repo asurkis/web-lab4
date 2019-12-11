@@ -12,8 +12,8 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.assemblers.ResultAssembler
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.*
 import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.ForbiddenException
 import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.ResultNotFoundException
-import ru.ifmo.se.labs.asurkis.lab4.backend.forms.RequestForm
-import ru.ifmo.se.labs.asurkis.lab4.backend.forms.ResultChangeForm
+import ru.ifmo.se.labs.asurkis.lab4.backend.forms.MultipleRequestsForm
+import ru.ifmo.se.labs.asurkis.lab4.backend.forms.MultipleResultChangeForm
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 import javax.validation.Valid
@@ -62,12 +62,12 @@ class ResultController(val pointRepository: PointRepository,
 
     @Transactional
     @PostMapping("/add")
-    fun addResults(@Valid @RequestBody requests: Iterable<RequestForm>,
+    fun addResults(@Valid @RequestBody requests: MultipleRequestsForm,
                    @AuthenticationPrincipal user: User): CollectionModel<EntityModel<Point>> {
-        val points = requests.map {
-            val newPoint = Point(user = user, x = it.x, y = it.y)
-            for (radius in it.rs) {
-                val newResult = Result(point = newPoint, radius = radius)
+        val points = requests.items!!.map {
+            val newPoint = Point(user = user, x = it!!.x!!, y = it.y!!)
+            for (radius in it.rs!!) {
+                val newResult = Result(point = newPoint, radius = radius!!)
                 pointRepository.save(newPoint)
                 resultRepository.save(newResult)
             }
@@ -80,19 +80,19 @@ class ResultController(val pointRepository: PointRepository,
 
     @Transactional
     @PostMapping("/change")
-    fun changeResults(@Valid @RequestBody changes: Iterable<ResultChangeForm>,
+    fun changeResults(@Valid @RequestBody changes: MultipleResultChangeForm,
                       @AuthenticationPrincipal user: User) {
         val isAdmin = user.authorities.contains(Role("ADMIN"))
 
-        for (change in changes) {
-            val result = resultRepository.findById(change.id).orElseThrow { ResultNotFoundException(change.id) }
+        for (change in changes.items!!) {
+            val result = resultRepository.findById(change!!.id!!).orElseThrow { ResultNotFoundException(change.id!!) }
             if (!isAdmin && result.userId != user.id) {
                 throw ForbiddenException()
             }
-            if (change.toDelete) {
+            if (change.toDelete!!) {
                 resultRepository.deleteById(result.id)
             } else {
-                result.radius = change.radius
+                result.radius = change.radius!!
                 resultRepository.save(result)
             }
         }

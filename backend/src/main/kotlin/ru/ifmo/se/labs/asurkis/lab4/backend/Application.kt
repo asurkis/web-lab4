@@ -12,10 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -25,7 +22,6 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.data.Role
 import ru.ifmo.se.labs.asurkis.lab4.backend.data.User
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
-import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.RoleRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.services.UserService
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -35,20 +31,6 @@ import javax.servlet.http.HttpServletResponse
 class SecurityConfiguration(val userService: UserService,
                             val passwordEncoder: BCryptPasswordEncoder) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
-        /* val loginSuccessHandler = object : SimpleUrlAuthenticationSuccessHandler() {
-            override fun onAuthenticationSuccess(request: HttpServletRequest?,
-                                                 response: HttpServletResponse?,
-                                                 authentication: Authentication?) {
-            }
-        }
-
-        val loginFailureHandler = object : SimpleUrlAuthenticationFailureHandler() {
-            override fun onAuthenticationFailure(request: HttpServletRequest?,
-                                                 response: HttpServletResponse?,
-                                                 exception: AuthenticationException?) {
-            }
-        } */
-
         val logoutSuccessHandler = object : SimpleUrlLogoutSuccessHandler() {
             override fun onLogoutSuccess(request: HttpServletRequest?,
                                          response: HttpServletResponse?,
@@ -59,12 +41,9 @@ class SecurityConfiguration(val userService: UserService,
         http!!
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/login").permitAll()
+                .antMatchers("/register", "/login", "/test").permitAll()
                 .anyRequest().authenticated()
                 .and().cors()
-                // .and().formLogin()
-                // .successHandler(loginSuccessHandler)
-                // .failureHandler(loginFailureHandler)
                 .and().logout().logoutSuccessHandler(logoutSuccessHandler)
     }
 
@@ -110,9 +89,6 @@ class Application {
                     .allowedOrigins("http://localhost:4200")
         }
     }
-
-//    @Bean
-//    fun sessionStrategy() = HeaderHttpSessionIdResolver.xAuthToken()
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
