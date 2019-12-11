@@ -74,11 +74,13 @@ export class SharedDataService {
 
   async pushChanges() {
     try {
-      const responseResults: any = await this.http.post(this.backendUrl + '/change', this.results.map(r => ({
-        id: r.id,
-        toDelete: r.toDelete === true,
-        radius: r.radius
-      })), {
+      const responseResults: any = await this.http.post(this.backendUrl + '/change', {
+        items: this.results.map(r => ({
+          id: r.id,
+          toDelete: r.toDelete === true,
+          radius: r.radius
+        }))
+      }, {
         withCredentials: true
       }).toPromise();
       await this.fetchResults();
@@ -89,11 +91,13 @@ export class SharedDataService {
 
   async pushRequest({ x, y }: Point) {
     try {
-      const responsePoints: any = await this.http.post(this.backendUrl + '/add', [{
-        x: +x,
-        y: +y,
-        rs: [ this.selectedRadius ]
-      }], {
+      const responsePoints: any = await this.http.post(this.backendUrl + '/add', {
+        items: [{
+          x: +x,
+          y: +y,
+          rs: [ this.selectedRadius ]
+        }]
+      }, {
         withCredentials: true
       }).toPromise();
 
