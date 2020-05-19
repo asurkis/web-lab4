@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.EnableMBeanExport
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -51,6 +52,7 @@ class SecurityConfiguration(val userService: UserService,
 }
 
 @SpringBootApplication
+@EnableMBeanExport
 class Application {
     @Bean
     fun corsConfigurer() = object : WebMvcConfigurer {

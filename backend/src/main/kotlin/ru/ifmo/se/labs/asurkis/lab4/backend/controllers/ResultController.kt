@@ -14,6 +14,7 @@ import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.ForbiddenException
 import ru.ifmo.se.labs.asurkis.lab4.backend.exceptions.ResultNotFoundException
 import ru.ifmo.se.labs.asurkis.lab4.backend.forms.MultipleRequestsForm
 import ru.ifmo.se.labs.asurkis.lab4.backend.forms.MultipleResultChangeForm
+import ru.ifmo.se.labs.asurkis.lab4.backend.mbeans.TotalCounter
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.PointRepository
 import ru.ifmo.se.labs.asurkis.lab4.backend.repositories.ResultRepository
 import javax.validation.Valid
@@ -22,7 +23,8 @@ import javax.validation.Valid
 class ResultController(val pointRepository: PointRepository,
                        val pointAssembler: PointAssembler,
                        val resultRepository: ResultRepository,
-                       val resultAssembler: ResultAssembler) {
+                       val resultAssembler: ResultAssembler,
+                       val totalCounter: TotalCounter) {
     @GetMapping("/users/{userId}/points/{pointId}/results/{resultId}")
     fun one(@PathVariable userId: Long,
             @PathVariable pointId: Long,
@@ -70,6 +72,7 @@ class ResultController(val pointRepository: PointRepository,
                 val newResult = Result(point = newPoint, radius = radius!!)
                 pointRepository.save(newPoint)
                 resultRepository.save(newResult)
+                totalCounter.onResultAdded(newResult)
             }
             newPoint
         }
