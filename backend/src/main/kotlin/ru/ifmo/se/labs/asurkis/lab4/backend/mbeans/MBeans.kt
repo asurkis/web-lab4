@@ -36,7 +36,6 @@ class TotalCounter(val resultRepository: ResultRepository) : NotificationPublish
             counter = 0
         } else {
             if (++counter >= counterLimit) {
-                println("Notification sent!")
                 notificationPublisher?.sendNotification(Notification(
                         "miss", this, sequenceNumber++,
                         "User missed $counterLimit times in a row"))
